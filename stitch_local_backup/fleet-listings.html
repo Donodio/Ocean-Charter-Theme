@@ -1,0 +1,47 @@
+<!-- Ocean Charter - Yacht Listings -->
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ocean Charter | Premium Yacht Listings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#d9b230",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#0a0c10",
+                        "accent-blue": "#1a2a3a",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-effect {
+            background: rgba(26, 42, 58, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-background-dark font-display text-slate-100 min-h-screen">
+<!-- [Full fleet listings HTML - reference for filter panel and boat card design] -->
+<!-- Filter: glass-effect rounded-2xl p-4 mb-12, 4 selects: Type/Capacity/Pricing/Location + More Filters button -->
+<!-- Cards: bg-white/5 rounded-2xl border border-white/10 hover:border-primary/50 -->
+<!--   Image: aspect-[4/3], star rating overlay at bottom of image -->
+<!--   Content: title (font-bold group-hover:text-primary) + price ($X,XXX /hr) -->
+<!--   Specs: person icon + guests, location icon + city -->
+<!--   Buttons: Details (bg-white/10 flex-1) + Quick Book (bg-primary flex-[2] uppercase) -->
+</body></html>

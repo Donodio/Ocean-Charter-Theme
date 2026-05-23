@@ -1,0 +1,48 @@
+{
+	"version": 2,
+	"settings": {
+		"appearanceTools": true,
+		"color": {
+			"palette": [
+				{
+					"slug": "primary",
+					"color": "#d9b230",
+					"name": "Luxury Gold"
+				},
+				{
+					"slug": "secondary",
+					"color": "#0a1628",
+					"name": "Deep Ocean"
+				},
+				{
+					"slug": "accent",
+					"color": "#0066cc",
+					"name": "Bright Sea"
+				},
+				{
+					"slug": "white",
+					"color": "#ffffff",
+					"name": "White"
+				}
+			]
+		},
+		"typography": {
+			"fontFamilies": [
+				{
+					"fontFamily": "var(--font-body)",
+					"name": "Theme Body Font",
+					"slug": "body"
+				},
+				{
+					"fontFamily": "var(--font-heading)",
+					"name": "Theme Heading Font",
+					"slug": "heading"
+				}
+			]
+		},
+		"layout": {
+			"contentSize": "1200px",
+			"wideSize": "1440px"
+		}
+	}
+}

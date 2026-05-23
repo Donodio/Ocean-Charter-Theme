@@ -1,0 +1,3562 @@
+/*
+Theme Name: Ocean Charter
+Theme URI: https://oceancharter.com
+Description: World-class luxury yacht rental theme with Elementor and BBC plugin integration.
+Version: 1.0.0
+Author: Ocean Charter
+Text Domain: ocean-charter
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+*/
+
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root {
+  --primary:        #d9b230;
+  --primary-dark:   #b8941f;
+  --primary-hover:  #f1c944;
+  --secondary:      #0a101a;
+  --surface:        #111a28;
+  --surface-2:      #1a2535;
+  --surface-light:  #182538;
+  --text:           #f0ece3;
+  --text-light:     #f8fafc;
+  --text-muted:     #8a9bb0;
+  --border:         rgba(217,178,48,0.15);
+
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body:    'Inter', system-ui, -apple-system, sans-serif;
+
+  --radius:      8px;
+  --radius-sm:   4px;
+  --radius-lg:   16px;
+  --radius-full: 9999px;
+  --radius-pill: 50px;
+
+  --shadow-sm:   0 4px 6px -1px rgba(0,0,0,0.3), 0 2px 4px -1px rgba(0,0,0,0.2);
+  --shadow-md:   0 10px 15px -3px rgba(0,0,0,0.4), 0 4px 6px -2px rgba(0,0,0,0.2);
+  --shadow-lg:   0 20px 25px -5px rgba(0,0,0,0.5), 0 10px 10px -5px rgba(0,0,0,0.2);
+  --shadow-card: 0 8px 40px rgba(0,0,0,0.4);
+  --shadow-glow: 0 0 40px rgba(217,178,48,0.15);
+
+  --transition:       0.35s cubic-bezier(0.4,0,0.2,1);
+  --transition-fast:  150ms cubic-bezier(0.4,0,0.2,1);
+  --transition-slow:  0.6s cubic-bezier(0.4,0,0.2,1);
+  --transition-bounce: 500ms cubic-bezier(0.34,1.56,0.64,1);
+
+  --glass-bg:        rgba(17,26,40,0.70);
+  --glass-border:    rgba(255,255,255,0.08);
+  --glass-highlight: rgba(255,255,255,0.12);
+
+  --container:    1280px;
+  --section-pad:  clamp(4rem, 8vw, 8rem);
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  font-weight: var(--body-font-weight, 400);
+  font-size: var(--body-font-size, 16px);
+  line-height: var(--body-line-height, 1.7);
+  letter-spacing: var(--body-letter-spacing, 0);
+  color: var(--body-font-color, var(--text));
+  background: var(--secondary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+a:hover { color: var(--primary-hover); }
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: var(--heading-font-weight, 700);
+  letter-spacing: var(--heading-letter-spacing, 0);
+  line-height: 1.2;
+  color: var(--text);
+  margin-top: 0;
+  margin-bottom: 0.5em;
+}
+p { color: inherit; }
+h1 { font-size: clamp(2.8rem, 5vw, 5rem);   letter-spacing: -0.02em; }
+h2 { font-size: clamp(2rem, 3.5vw, 3.2rem); letter-spacing: -0.01em; }
+h3 { font-size: clamp(1.4rem, 2.5vw, 2rem); }
+h4 { font-size: clamp(1.1rem, 2vw, 1.4rem); }
+
+.oc-caption {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--primary); /* Stitch: text-primary font-bold tracking-[0.2em] */
+}
+
+.oc-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+.text-gold,
+.text-primary { color: var(--primary); }
+.text-muted    { color: var(--text-muted); }
+
+/* ============================================================
+   LAYOUT UTILITIES
+   ============================================================ */
+.oc-container,
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 4vw, 2.5rem);
+}
+
+.oc-section { padding: var(--section-pad) 0; }
+.oc-section--dark     { background: var(--secondary); }
+.oc-section--surface  { background: var(--surface); }
+.oc-section--surface-2{ background: var(--surface-2); }
+
+.bg-surface      { background-color: var(--surface); }
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn-primary,
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2rem;
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition);
+  text-decoration: none;
+  white-space: normal;
+  line-height: 1;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--secondary);
+  box-shadow: var(--shadow-glow);
+}
+.btn-primary:hover {
+  background: var(--primary-hover);
+  color: var(--secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(217,178,48,0.3);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1.5px solid var(--border);
+}
+.btn-secondary:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes fadeInUp    { from { opacity:0; transform: translateY(40px); } to { opacity:1; transform: translateY(0); } }
+@keyframes fadeInLeft  { from { opacity:0; transform: translateX(-40px); } to { opacity:1; transform: translateX(0); } }
+@keyframes fadeInRight { from { opacity:0; transform: translateX(40px); } to { opacity:1; transform: translateX(0); } }
+@keyframes fadeIn      { from { opacity:0; } to { opacity:1; } }
+@keyframes shimmer     { 0%,100% { opacity:0.6; } 50% { opacity:1; } }
+@keyframes float       { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes bounceIn    {
+  0%   { opacity:0; transform: scale(0.3); }
+  50%  { transform: scale(1.05); }
+  70%  { transform: scale(0.9); }
+  100% { opacity:1; transform: scale(1); }
+}
+@keyframes fp-rise {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fp-scroll {
+  0%   { height: 0; opacity: 0; }
+  30%  { height: 60px; opacity: 1; }
+  100% { height: 60px; opacity: 0; transform: translateY(40px); }
+}
+
+/* Scroll-reveal base state (toggled by main.js) */
+[data-animate] {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity var(--transition-slow), transform var(--transition-slow);
+}
+[data-animate="left"]  { transform: translateX(-40px); }
+[data-animate="right"] { transform: translateX(40px); }
+[data-animate].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  [data-animate] { opacity: 1; transform: none; }
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.oc-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 1rem clamp(1rem, 3vw, 2rem);
+}
+
+.oc-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Glass pill — wraps logo + nav + CTA (Stitch pattern) */
+.oc-header__pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border, rgba(217, 178, 48, 0.1));
+  border-radius: 9999px;
+  padding: 0.625rem 0.75rem 0.625rem 1.5rem;
+}
+
+/* Logo */
+.oc-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.oc-logo__icon { width: 32px; height: 32px; }
+.oc-logo__img  { max-height: 40px; width: auto; object-fit: contain; }
+.oc-logo__text {
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.oc-logo__text em {
+  font-family: var(--font-heading);
+  font-style: italic;
+  color: var(--primary);
+  font-weight: 400;
+}
+
+/* Nav (inside pill) */
+.oc-nav { flex: 1; display: flex; justify-content: center; }
+
+.oc-nav__list {
+  list-style: none;
+  display: flex;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+}
+
+.oc-nav__list li a {
+  display: block;
+  padding: 0.5rem 1.125rem;
+  border-radius: 30px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--nav-link-color, var(--text-muted));
+  transition: all var(--transition);
+  white-space: nowrap;
+  text-decoration: none;
+}
+.oc-nav__list li a:hover,
+.oc-nav__list li.current-menu-item a,
+.oc-nav__list li.current_page_item a {
+  background: rgba(217, 178, 48, 0.12);
+  color: var(--primary);
+}
+
+/* Header CTA — colours driven by Customizer */
+.oc-header__cta {
+  flex-shrink: 0;
+  font-size: 0.875rem;
+  padding: 0.625rem 1.5rem;
+  background: var(--cta-bg, var(--primary));
+  color: var(--cta-text, var(--secondary));
+}
+.oc-header__cta:hover {
+  background: var(--cta-bg, var(--primary));
+  color: var(--cta-text, var(--secondary));
+  filter: brightness(1.1);
+}
+
+/* Hamburger */
+.oc-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+.oc-hamburger span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background: var(--text);
+  border-radius: 2px;
+  transition: all var(--transition);
+}
+.oc-hamburger.is-open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.oc-hamburger.is-open span:nth-child(2) { opacity: 0; }
+.oc-hamburger.is-open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+/* Mobile nav */
+.oc-mobile-nav {
+  display: none;
+  background: rgba(10,16,26,0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  padding: 0 clamp(1rem, 4vw, 2.5rem);
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+}
+.oc-mobile-nav.is-open {
+  display: block;
+  max-height: 480px;
+  padding: 1.5rem clamp(1rem, 4vw, 2.5rem);
+}
+.oc-mobile-nav__list,
+.oc-mobile-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+}
+.oc-mobile-nav__list li a,
+.oc-mobile-nav ul li a {
+  display: block;
+  padding: 0.875rem 0;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  transition: color var(--transition);
+}
+.oc-mobile-nav__list li a:hover,
+.oc-mobile-nav ul li a:hover { color: var(--primary); }
+.oc-mobile-nav .btn-primary { width: 100%; justify-content: center; }
+
+/* Page offset for fixed header */
+.admin-bar .oc-header { top: 32px; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.oc-footer {
+  background: var(--secondary);
+  border-top: 1px solid var(--border);
+  padding: clamp(3rem, 6vw, 5rem) 0 0;
+}
+
+.oc-footer__grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+.oc-footer__brand .oc-logo { margin-bottom: 1rem; }
+.oc-footer__brand p {
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  max-width: 280px;
+}
+
+.oc-footer__socials {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+.oc-footer__socials a {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: all var(--transition);
+}
+.oc-footer__socials a:hover { border-color: var(--primary); color: var(--primary); }
+.oc-footer__socials svg { width: 18px; height: 18px; }
+
+.oc-footer__col h4 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 1.25rem;
+}
+.oc-footer__col ul { list-style: none; padding: 0; }
+.oc-footer__col ul li { margin-bottom: 0.625rem; }
+.oc-footer__col ul li a {
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+  transition: color var(--transition);
+}
+.oc-footer__col ul li a:hover { color: var(--text); }
+
+.oc-footer__contact p {
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.oc-footer__whatsapp-btn { margin-top: 1.25rem; font-size: 0.875rem; }
+
+.oc-footer__bottom {
+  border-top: 1px solid var(--border);
+  padding: 1.5rem 0;
+  margin-top: clamp(2rem, 4vw, 3rem);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+/* WhatsApp floating button */
+.oc-whatsapp-fab {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9999;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #25D366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+  transition: transform var(--transition), box-shadow var(--transition);
+  animation: bounceIn 0.5s 2s both;
+}
+.oc-whatsapp-fab:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 28px rgba(37,211,102,0.5);
+  color: white;
+}
+.oc-whatsapp-fab svg { width: 28px; height: 28px; fill: white; }
+
+/* Tooltip */
+.oc-whatsapp-fab::before {
+  content: 'Chat with us';
+  position: absolute;
+  right: 64px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition);
+  border: 1px solid var(--border);
+}
+.oc-whatsapp-fab:hover::before { opacity: 1; }
+
+/* ============================================================
+   CARDS (shared)
+   ============================================================ */
+.oc-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+.oc-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-glow);
+  border-color: rgba(217,178,48,0.3);
+}
+
+.oc-card__img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+}
+
+/* ============================================================
+   SECTION HEADERS (shared)
+   ============================================================ */
+.oc-section-header {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto clamp(2.5rem, 5vw, 4rem);
+}
+.oc-section-header .oc-caption { margin-bottom: 0.75rem; display: block; }
+.oc-section-header h2 { margin-bottom: 1rem; }
+.oc-section-header p  { color: var(--text-muted); }
+
+/* ============================================================
+   HERO (shared)
+   ============================================================ */
+.oc-hero {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--secondary);
+  padding-bottom: clamp(2rem, 4vw, 4rem);
+  padding-top: clamp(5rem, 8vw, 8rem);
+}
+
+.oc-hero--short { min-height: 45vh; }
+
+/* Banner / page-header variant */
+.oc-hero--banner {
+  height: auto;
+  min-height: 280px;
+  max-height: none;
+}
+.oc-hero--banner .oc-hero__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  max-width: 1200px;
+  width: 100%;
+  text-align: center;
+}
+.oc-hero--banner .oc-hero__eyebrow {
+  margin-bottom: 0;
+  font-size: 0.8125rem;
+}
+.oc-hero--banner .oc-hero__eyebrow::after {
+  display: none;
+}
+.oc-hero--banner .oc-hero__content h1 {
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  margin-bottom: 0;
+  white-space: normal;
+}
+@media (max-width: 640px) {
+  .oc-hero--banner .oc-hero__content { flex-direction: column; text-align: center; gap: 0.75rem; }
+  .oc-hero--banner .oc-hero__eyebrow::after { display: none; }
+  .oc-hero--banner .oc-hero__content h1 { white-space: normal; }
+}
+
+.oc-hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Use parent <section>'s --oc-hero-pos var, falling back to center.
+     !important ensures lazy-load libraries (Smush, etc.) that may rewrite
+     the img's inline style attribute can't clobber the chosen position. */
+  object-position: var(--oc-hero-pos, center) !important;
+}
+
+.oc-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(10,16,26,0.3) 0%, rgba(10,16,26,0.7) 100%);
+}
+
+/* Listing page hero backgrounds — always cover + center */
+.pk-hero__bg,
+.dt-hero__bg,
+.sv-hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+/* Hero safety-net: every hero auto-crops to center as the section shrinks.
+   Inline `background-position:<value>` from the Hero Position meta-field
+   overrides this default, but cover + no-repeat always apply. */
+.it-hero,
+.oc-pkg-hero,
+.oc-dest-hero,
+.oc-svc-hero,
+.oc-bpkg-hero,
+.oc-offer-hero,
+.oc-itin-hero {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.oc-hero__content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 900px;
+  padding: 0 clamp(1rem, 4vw, 2.5rem);
+}
+
+.oc-hero__eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 1.5rem;
+}
+
+.oc-hero__content h1 { margin-bottom: 1.25rem; }
+.oc-hero__content h1 em {
+  font-style: italic;
+  color: var(--primary);
+}
+.oc-hero__content p {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: rgba(240,236,227,0.85);
+  margin-bottom: 2.5rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.oc-hero__actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ============================================================
+   LIGHTBOX (CSS :target approach)
+   ============================================================ */
+.oc-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0,0,0,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition);
+}
+.oc-lightbox:target {
+  opacity: 1;
+  pointer-events: all;
+}
+.oc-lightbox img {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: var(--radius);
+}
+.oc-lightbox__close {
+  position: absolute;
+  top: 1.5rem; right: 1.5rem;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  font-size: 1.25rem;
+  text-decoration: none;
+  transition: all var(--transition);
+}
+.oc-lightbox__close:hover { background: var(--primary); color: var(--secondary); }
+
+/* ============================================================
+   LEGACY / DEMO CONTENT UTILITIES
+   (retained for existing Elementor templates & front-page content)
+   ============================================================ */
+
+/* Eyebrow label */
+.fp-eyebrow {
+  display: inline-block;
+  font-size: 11px;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-weight: 700;
+}
+.fp-eyebrow--light { color: rgba(217,178,48,0.7); }
+
+/* Section titles */
+.fp-section-title {
+  font-family: var(--font-heading);
+  font-size: clamp(32px, 4vw, 52px);
+  color: var(--text-light);
+  font-weight: 400;
+  margin: 14px 0 0;
+  line-height: 1.15;
+}
+.fp-section-desc {
+  color: var(--text-muted);
+  font-size: 17px;
+  line-height: 1.7;
+  max-width: 640px;
+  margin: 20px auto 0;
+}
+
+/* Section headers */
+.fp-section-header { text-align: center; margin-bottom: 72px; }
+.fp-section-header--left {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* View all link */
+.fp-view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 12px;
+  transition: gap var(--transition-fast), color var(--transition-fast);
+}
+.fp-view-all:hover { gap: 14px; color: var(--primary-hover); }
+.fp-arrow { transition: transform var(--transition-fast); }
+.fp-view-all:hover .fp-arrow { transform: translateX(4px); }
+
+/* Hero shared */
+.fp-hero__stats {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  z-index: 4;
+  background: rgba(10,16,26,0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--glass-border);
+}
+.fp-hero__stats-inner {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  text-align: center;
+}
+.fp-stat {
+  padding: 24px;
+  border-right: 1px solid var(--glass-border);
+}
+.fp-stat:last-child { border-right: none; }
+.fp-stat__num {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 36px;
+  color: var(--primary);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.fp-stat__label {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Full hero */
+.fp-hero {
+  position: relative;
+  height: 100vh;
+  min-height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.fp-hero__bg { position: absolute; inset: 0; z-index: 1; }
+.fp-hero__img { width: 100%; height: 100%; object-fit: cover; }
+.fp-hero__overlay {
+  position: absolute; inset: 0; z-index: 2;
+  background: linear-gradient(to bottom, rgba(6,14,26,0.3) 0%, rgba(6,14,26,0.75) 70%, rgba(6,14,26,1) 100%);
+}
+.fp-hero__content { position: relative; z-index: 3; padding-bottom: 120px; }
+.fp-hero__eyebrow {
+  display: block;
+  font-size: 11px;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 700;
+  margin-bottom: 20px;
+  animation: fp-rise 1s ease both;
+}
+.fp-hero__title {
+  font-family: var(--font-heading);
+  font-size: clamp(52px, 9vw, 104px);
+  font-weight: 400;
+  color: var(--text-light);
+  margin: 0 0 28px;
+  line-height: 1.0;
+  animation: fp-rise 1s 0.15s ease both;
+}
+.fp-hero__title em { font-style: italic; color: var(--primary); }
+.fp-hero__desc {
+  font-size: clamp(17px, 2vw, 22px);
+  color: var(--text-muted);
+  margin: 0 0 44px;
+  line-height: 1.65;
+  max-width: 640px;
+  animation: fp-rise 1s 0.3s ease both;
+}
+.fp-hero__actions { display: flex; gap: 16px; animation: fp-rise 1s 0.45s ease both; }
+.fp-hero__scroll {
+  position: absolute;
+  bottom: 140px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  text-decoration: none;
+}
+.fp-hero__scroll-line {
+  width: 1px; height: 60px;
+  background: linear-gradient(to bottom, var(--primary), transparent);
+  animation: fp-scroll 2s ease infinite;
+}
+
+/* Fleet / Vessel Cards */
+.fp-fleet { padding: 120px 0; background: var(--secondary); }
+.fp-fleet__grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; }
+.fp-vessel-card {
+  background: var(--surface);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+.fp-vessel-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(217,178,48,0.25);
+  box-shadow: var(--shadow-lg), 0 0 40px rgba(217,178,48,0.04);
+}
+.fp-vessel-card__img-wrap { position: relative; height: 260px; overflow: hidden; }
+.fp-vessel-card__img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform var(--transition-slow); display: block;
+}
+.fp-vessel-card:hover .fp-vessel-card__img { transform: scale(1.06); }
+.fp-vessel-card__img--placeholder { background: linear-gradient(135deg,#0d1828 0%,#162030 50%,#0a1320 100%); }
+.fp-vessel-card__loc {
+  position: absolute; top: 14px; left: 14px;
+  background: rgba(10,16,26,0.65);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
+  color: var(--text-light);
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  font-size: 11px; font-weight: 600;
+  display: flex; align-items: center; gap: 5px; z-index: 2;
+}
+.fp-vessel-card__body { padding: 28px; display: flex; flex-direction: column; gap: 16px; }
+.fp-vessel-card__name {
+  font-family: var(--font-heading); font-size: 22px;
+  color: var(--text-light); margin: 0; font-weight: 600; line-height: 1.2;
+}
+.fp-vessel-card__name a { color: inherit; text-decoration: none; }
+.fp-vessel-card__desc { color: var(--text-muted); font-size: 14px; line-height: 1.65; margin: 0; }
+.fp-vessel-card__specs { display: flex; gap: 16px; flex-wrap: wrap; }
+.fp-vessel-card__specs span {
+  font-size: 13px; color: var(--text-muted);
+  background: var(--surface-light); padding: 5px 12px;
+  border-radius: var(--radius-full); border: 1px solid var(--glass-border);
+}
+.fp-vessel-card__footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 16px; border-top: 1px solid var(--glass-border);
+}
+.fp-vessel-card__price { display: flex; align-items: baseline; gap: 5px; }
+.fp-vessel-card__price-from { font-size: 12px; color: var(--text-muted); }
+.fp-vessel-card__price-val { font-family: var(--font-heading); font-size: 28px; color: var(--primary); line-height: 1; }
+.fp-vessel-card__price-unit { font-size: 13px; color: var(--text-muted); }
+.fp-vessel-card__cta {
+  color: var(--primary); font-size: 13px; font-weight: 700;
+  text-decoration: none; letter-spacing: 0.02em; transition: color var(--transition-fast);
+}
+.fp-vessel-card__cta:hover { color: var(--primary-hover); }
+
+/* Why Us */
+.fp-why { padding: 100px 0; background: var(--surface); }
+.fp-why__inner { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 6vw, 80px); align-items: center; }
+.fp-why__lead { color: var(--text-muted); font-size: 17px; line-height: 1.8; margin: 20px 0 40px; }
+.fp-why__pillars { display: flex; flex-direction: column; gap: 28px; }
+.fp-pillar { display: flex; gap: 16px; align-items: flex-start; }
+.fp-pillar__icon {
+  width: 48px; height: 48px;
+  background: rgba(217,178,48,0.08); border: 1px solid rgba(217,178,48,0.2);
+  border-radius: var(--radius); display: flex; align-items: center; justify-content: center;
+  color: var(--primary); flex-shrink: 0;
+}
+.fp-pillar__title { font-family: var(--font-heading); font-size: 18px; color: var(--text-light); margin: 0 0 6px; font-weight: 600; }
+.fp-pillar__desc  { color: var(--text-muted); font-size: 14px; line-height: 1.65; margin: 0; }
+.fp-why__testimonial-wrap { display: flex; align-items: center; }
+.fp-testimonial {
+  background: var(--secondary); border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg); padding: 48px; margin: 0; position: relative;
+}
+.fp-testimonial::before {
+  content: '\201C';
+  position: absolute; top: 24px; left: 40px;
+  font-family: var(--font-heading); font-size: 120px;
+  color: var(--primary); opacity: 0.15; line-height: 0.8; pointer-events: none;
+}
+.fp-testimonial__quote { color: var(--text-light); font-size: 18px; line-height: 1.75; font-style: italic; margin-bottom: 32px; position: relative; }
+.fp-testimonial__author { display: flex; align-items: center; gap: 16px; }
+.fp-testimonial__avatar {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--surface-light), var(--glass-bg));
+  border: 2px solid var(--primary); flex-shrink: 0;
+}
+.fp-testimonial__name { display: block; color: var(--text-light); font-family: var(--font-heading); font-weight: 600; font-size: 16px; font-style: normal; margin-bottom: 3px; }
+.fp-testimonial__role { font-size: 13px; color: var(--text-muted); }
+
+/* Destinations Grid */
+.fp-destinations { padding: 100px 0; background: var(--secondary); }
+.fp-dest-grid {
+  display: grid; grid-template-columns: 1.3fr 1fr; grid-template-rows: auto auto;
+  gap: 20px; margin-top: 60px;
+}
+.fp-dest-card {
+  position: relative; border-radius: var(--radius-lg); overflow: hidden;
+  height: 300px; cursor: pointer; transition: transform var(--transition);
+}
+.fp-dest-card--large { grid-row: 1 / 3; height: auto; min-height: 440px; }
+.fp-dest-card:hover  { transform: scale(1.01); }
+.fp-dest-card__bg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  transition: transform var(--transition-slow);
+}
+.fp-dest-card:hover .fp-dest-card__bg { transform: scale(1.04); }
+.fp-dest-card__bg--santorini { background: linear-gradient(135deg,#1a2a3a 0%,#2a4a6a 50%,#1a3a5a 100%); }
+.fp-dest-card__bg--amalfi    { background: linear-gradient(135deg,#1a2a1a 0%,#2a4a2a 50%,#1a3a1a 100%); }
+.fp-dest-card__bg--bahamas   { background: linear-gradient(135deg,#0a2a3a 0%,#1a5a6a 50%,#0a3a4a 100%); }
+.fp-dest-card__bg--riviera   { background: linear-gradient(135deg,#1a1a2a 0%,#3a3a5a 50%,#2a2a4a 100%); }
+.fp-dest-card__overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(6,14,26,0.85) 0%, rgba(6,14,26,0.2) 60%, transparent 100%);
+}
+.fp-dest-card__content { position: absolute; bottom: 0; left: 0; right: 0; padding: 28px; z-index: 2; }
+.fp-dest-card__region { display: block; font-size: 11px; color: var(--primary); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; margin-bottom: 6px; }
+.fp-dest-card__name { font-family: var(--font-heading); font-size: clamp(20px,2.5vw,28px); color: var(--text-light); margin: 0 0 12px; font-weight: 400; }
+.fp-dest-card--large .fp-dest-card__name { font-size: clamp(28px,3.5vw,42px); }
+.fp-dest-card__link { font-size: 13px; color: var(--primary); font-weight: 700; text-decoration: none; letter-spacing: 0.05em; transition: color var(--transition-fast); }
+.fp-dest-card__link:hover { color: var(--primary-hover); }
+.fp-destinations__cta { text-align: center; margin-top: 48px; }
+
+/* Services Grid */
+.fp-services { padding: 100px 0; background: var(--surface); }
+.fp-services .fp-section-header { margin-bottom: 60px; }
+.fp-services__grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
+.fp-service-card {
+  background: var(--secondary); border: 1px solid var(--glass-border); border-radius: var(--radius-lg);
+  padding: 36px 28px; transition: transform var(--transition), border-color var(--transition);
+  display: flex; flex-direction: column;
+}
+.fp-service-card:hover { transform: translateY(-6px); border-color: rgba(217,178,48,0.25); }
+.fp-service-card__icon {
+  width: 56px; height: 56px;
+  background: rgba(217,178,48,0.08); border: 1px solid rgba(217,178,48,0.2);
+  border-radius: var(--radius); display: flex; align-items: center; justify-content: center;
+  color: var(--primary); margin-bottom: 24px;
+}
+.fp-service-card__title { font-family: var(--font-heading); font-size: 20px; color: var(--text-light); margin: 0 0 12px; font-weight: 600; }
+.fp-service-card__desc  { color: var(--text-muted); font-size: 14px; line-height: 1.7; margin: 0 0 20px; flex: 1; }
+.fp-service-card__features { list-style: none; padding: 0; margin: 0 0 24px; border-top: 1px solid var(--glass-border); padding-top: 16px; }
+.fp-service-card__features li { font-size: 13px; color: var(--text-muted); padding: 5px 0; display: flex; gap: 8px; align-items: center; }
+.fp-service-card__features li::before { content: '\00B7'; color: var(--primary); }
+.fp-service-card__link { color: var(--primary); font-size: 13px; font-weight: 700; text-decoration: none; letter-spacing: 0.03em; transition: color var(--transition-fast); margin-top: auto; }
+.fp-service-card__link:hover { color: var(--primary-hover); }
+
+/* Packages Grid */
+.fp-packages { padding: 100px 0; background: var(--secondary); }
+.fp-packages__grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; margin-top: 20px; }
+.fp-package-card {
+  background: var(--surface); border: 1px solid var(--glass-border); border-radius: var(--radius-lg);
+  display: flex; flex-direction: column; overflow: hidden;
+  transition: transform var(--transition), border-color var(--transition);
+}
+.fp-package-card:hover { transform: translateY(-6px); border-color: rgba(217,178,48,0.2); }
+.fp-package-card--featured {
+  border-color: rgba(217,178,48,0.35);
+  background: linear-gradient(160deg,#111a28 0%,#182030 100%);
+  position: relative;
+}
+.fp-package-card--featured::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+}
+.fp-package-card__header { padding: 36px 36px 24px; }
+.fp-package-card__badge {
+  display: inline-block; padding: 5px 12px; border-radius: var(--radius-full);
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+  background: rgba(255,255,255,0.07); color: var(--text-muted); margin-bottom: 18px;
+}
+.fp-package-card__badge--gold { background: var(--primary); color: #000; }
+.fp-package-card__name { font-family: var(--font-heading); font-size: 26px; color: var(--text-light); margin: 0 0 10px; font-weight: 400; }
+.fp-package-card__brief { color: var(--text-muted); font-size: 14px; line-height: 1.65; margin: 0; }
+.fp-package-card__body { padding: 0 36px 36px; flex: 1; display: flex; flex-direction: column; }
+.fp-package-card__price {
+  display: flex; align-items: baseline; gap: 8px;
+  padding: 20px 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);
+  margin-bottom: 20px;
+}
+.fp-package-card__price span  { font-size: 13px; color: var(--text-muted); }
+.fp-package-card__price strong { font-family: var(--font-heading); font-size: 38px; color: var(--primary); line-height: 1; }
+.fp-package-card__includes { list-style: none; padding: 0; margin: 0 0 28px; flex: 1; }
+.fp-package-card__includes li {
+  color: var(--text-muted); font-size: 14px; padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  display: flex; align-items: center; gap: 10px;
+}
+.fp-package-card__includes li::before { content: '\2713'; color: var(--primary); font-weight: 700; }
+
+/* CTA Section */
+.fp-cta { position: relative; padding: 120px 0; overflow: hidden; }
+.fp-cta__bg { position: absolute; inset: 0; background: linear-gradient(135deg,#060e1a 0%,#0d1f35 50%,#060e1a 100%); }
+.fp-cta__bg::before {
+  content: ''; position: absolute; top: -30%; left: 50%; transform: translateX(-50%);
+  width: 900px; height: 900px;
+  background: radial-gradient(circle, rgba(217,178,48,0.06) 0%, transparent 60%);
+  border-radius: 50%; pointer-events: none;
+}
+.fp-cta__inner { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 6vw, 80px); align-items: center; }
+.fp-cta__title { font-family: var(--font-heading); font-size: clamp(36px,5vw,64px); color: var(--text-light); font-weight: 400; margin: 16px 0 24px; line-height: 1.1; }
+.fp-cta__desc  { color: var(--text-muted); font-size: 18px; line-height: 1.7; margin-bottom: 40px; max-width: 520px; }
+.fp-cta__actions { display: flex; gap: 16px; flex-wrap: wrap; }
+.fp-cta__contact-info {
+  background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg); padding: 40px; display: flex; flex-direction: column; gap: 20px;
+}
+.fp-cta__info-item { display: flex; flex-direction: column; gap: 3px; padding-bottom: 20px; border-bottom: 1px solid var(--glass-border); }
+.fp-cta__info-item:last-of-type { border-bottom: none; padding-bottom: 0; }
+.fp-cta__info-label { font-size: 11px; color: var(--primary); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; }
+.fp-cta__info-val   { font-size: 15px; color: var(--text-light); }
+.fp-cta__whatsapp {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(37,211,102,0.12); border: 1px solid rgba(37,211,102,0.25);
+  color: #25D366; padding: 14px 20px; border-radius: var(--radius);
+  font-size: 14px; font-weight: 600; text-decoration: none; transition: background var(--transition-fast); margin-top: 8px;
+}
+.fp-cta__whatsapp:hover { background: rgba(37,211,102,0.2); color: #25D366; }
+
+/* Demo content */
+.st-hero, .st-page-header { text-align: center; padding: 8rem 2rem; background: linear-gradient(to bottom, rgba(10,22,40,0.8), transparent); }
+.st-hero h2, .st-page-header h2 { font-size: clamp(3rem,8vw,5rem); color: var(--primary); margin-bottom: 1.5rem; }
+.st-hero p,  .st-page-header p  { font-size: 1.25rem; max-width: 800px; margin: 0 auto; color: var(--text-muted); }
+.st-features, .st-services-grid, .st-destinations-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 2rem; padding: 4rem 2rem; max-width: 1400px; margin: 0 auto; }
+.st-feature-card, .st-service-item, .st-destination { padding: 3rem; background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: blur(10px); border-radius: var(--radius-lg); transition: var(--transition); }
+.st-feature-card:hover, .st-service-item:hover, .st-destination:hover { transform: translateY(-10px); border-color: var(--primary); }
+.st-feature-card h3, .st-service-item h4, .st-destination h3 { color: var(--primary); margin-bottom: 1rem; }
+.st-day { padding: 1.5rem; border-bottom: 1px solid var(--glass-border); max-width: 800px; margin: 0 auto; }
+.st-cta { text-align: center; padding: 6rem 2rem; background: var(--surface-light); border-radius: var(--radius-lg); margin: 4rem 2rem; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1200px) {
+  .fp-services__grid { grid-template-columns: repeat(2,1fr); }
+}
+
+@media (max-width: 1024px) {
+  .oc-footer__grid      { grid-template-columns: 1fr 1fr; }
+  .fp-why__inner        { grid-template-columns: 1fr; gap: 48px; }
+  .fp-why__testimonial-wrap { display: none; }
+  .fp-cta__inner        { grid-template-columns: 1fr; gap: 48px; }
+  .fp-dest-grid         { grid-template-columns: 1fr; }
+  .fp-dest-card--large  { min-height: 300px; }
+  .fp-fleet__grid       { grid-template-columns: repeat(2,1fr); }
+  .fp-packages__grid    { grid-template-columns: 1fr; }
+  .fp-hero__stats-inner { grid-template-columns: repeat(2,1fr); }
+  .fp-stat { padding: 16px; }
+  .fp-stat__num { font-size: 28px; }
+}
+
+@media (max-width: 768px) {
+  .oc-header__pill          { display: none; }
+  .oc-hamburger             { display: flex; }
+  .oc-footer__grid          { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .fp-hero                  { min-height: auto; height: auto; padding: 120px 0 160px; }
+  .fp-hero__title           { font-size: clamp(36px,10vw,56px); }
+  .fp-hero__actions         { flex-direction: column; align-items: stretch; }
+  .fp-hero__scroll          { display: none; }
+  .fp-fleet__grid           { grid-template-columns: 1fr; }
+  .fp-services__grid        { grid-template-columns: 1fr; }
+  .fp-vessel-card__img-wrap { height: 200px; }
+  .fp-section-header        { margin-bottom: 40px; }
+  .fp-fleet, .fp-why, .fp-services, .fp-packages, .fp-destinations { padding: 60px 0; }
+  .fp-cta { padding: 60px 0; }
+}
+
+@media (max-width: 600px) {
+  .oc-footer__grid          { grid-template-columns: 1fr; }
+  .oc-hero__actions         { flex-direction: column; align-items: stretch; }
+  .oc-whatsapp-fab          { bottom: 16px; right: 16px; width: 48px; height: 48px; }
+  .oc-whatsapp-fab svg      { width: 24px; height: 24px; }
+  .oc-whatsapp-fab::before  { display: none; }
+  .fp-hero__stats-inner     { grid-template-columns: 1fr 1fr; }
+  .fp-stat { padding: 12px 8px; }
+  .fp-stat__num { font-size: 24px; }
+  .fp-stat__label { font-size: 10px; }
+  .fp-dest-card { height: 220px; }
+  .fp-dest-card--large { min-height: 260px; }
+  .fp-testimonial { padding: 28px; }
+  .fp-testimonial__quote { font-size: 15px; }
+}
+
+@media (max-width: 480px) {
+  .oc-hero__content h1 { font-size: clamp(2rem,8vw,2.8rem); }
+  .btn-primary, .btn-secondary { width: 100%; justify-content: center; padding: 0.75rem 1.5rem; font-size: 0.875rem; }
+  .fp-hero__content { padding-bottom: 80px; }
+  .fp-hero__desc { font-size: 15px; margin-bottom: 28px; }
+  .fp-vessel-card__body { padding: 20px; }
+  .fp-vessel-card__name { font-size: 18px; }
+  .fp-vessel-card__price-val { font-size: 22px; }
+  .fp-package-card__header { padding: 24px 24px 16px; }
+  .fp-package-card__body { padding: 0 24px 24px; }
+  .fp-package-card__price strong { font-size: 28px; }
+  .fp-cta__title { font-size: clamp(28px,7vw,40px); }
+  .fp-cta__desc { font-size: 15px; }
+  .fp-cta__contact-info { padding: 24px; }
+  .fp-service-card { padding: 24px 20px; }
+  .fp-service-card__icon { width: 44px; height: 44px; margin-bottom: 16px; }
+}
+
+@media (max-width: 380px) {
+  .fp-hero__title { font-size: clamp(28px,9vw,40px); }
+  .fp-hero__stats-inner { grid-template-columns: 1fr 1fr; gap: 0; }
+  .fp-stat { padding: 10px 6px; }
+  .fp-stat__num { font-size: 20px; }
+  .fp-stat__label { font-size: 9px; letter-spacing: 0.04em; }
+  .oc-logo__text { font-size: 0.95rem; }
+}
+
+/* Header spacer — responsive to match header height */
+.oc-header-spacer { height: 76px; }
+@media (max-width: 768px) { .oc-header-spacer { height: 64px; } }
+@media (max-width: 480px) { .oc-header-spacer { height: 56px; } }
+
+@media (max-width: 380px) {
+  .fp-hero__title { font-size: clamp(28px,9vw,40px); }
+  .fp-hero__stats-inner { grid-template-columns: 1fr 1fr; gap: 0; }
+  .fp-stat { padding: 10px 6px; }
+  .fp-stat__num { font-size: 20px; }
+  .fp-stat__label { font-size: 9px; letter-spacing: 0.04em; }
+  .oc-logo__text { font-size: 0.95rem; }
+}
+
+/* ============================================================
+   BBC BOAT SEARCH — Ocean Charter style overrides
+   ============================================================ */
+.bbc-search-wrapper-v2 {
+  --bbc-primary-color: var(--primary, #d9b230);
+  --bbc-secondary-color: var(--primary-hover, #c9a420);
+  overflow: visible !important;   /* BBC sets overflow:hidden which clips corners */
+  border-radius: 16px !important;
+}
+/* Shared form base */
+.bbc-search-form-v2 {
+  border-radius: 16px !important;
+  outline: none !important;
+  padding: 0.5rem !important;
+}
+
+/* ── Background variants ─────────────────────────────────── */
+/* Glassmorphism (default) */
+.bbc-search-wrapper-v2.bbc-bg-glass .bbc-search-form-v2 {
+  background: rgba(26, 34, 51, 0.75) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+/* Transparent */
+.bbc-search-wrapper-v2.bbc-bg-transparent .bbc-search-form-v2 {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+/* Plain white card */
+.bbc-search-wrapper-v2.bbc-bg-plain .bbc-search-form-v2 {
+  background: #fff !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08) !important;
+}
+/* Plain: override dark-themed text for light background */
+.bbc-search-wrapper-v2.bbc-bg-plain .bbc-search-input-clean-v2,
+.bbc-search-wrapper-v2.bbc-bg-plain .bbc-search-select-clean-v2 {
+  color: #1a2233 !important;
+}
+.bbc-search-wrapper-v2.bbc-bg-plain .bbc-search-input-clean-v2::placeholder { color: #888 !important; }
+.bbc-search-wrapper-v2.bbc-bg-plain .bbc-search-form-v2 .bbc-search-group-v2 label { color: #555 !important; }
+.bbc-search-wrapper-v2.bbc-bg-plain .bbc-field-icon { color: var(--primary, #d9b230) !important; }
+
+/* ── Field group ─────────────────────────────────────────── */
+.bbc-search-form-v2 .bbc-search-group-v2 {
+  padding: 0.5rem 1.25rem;
+}
+.bbc-search-form-v2 .bbc-search-group-v2 label {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase;
+  color: var(--primary, #d9b230) !important;
+  margin-bottom: 2px !important;
+  white-space: nowrap;
+  display: block;
+}
+/* Icon + input row */
+.bbc-field-row {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+.bbc-field-ico {
+  flex-shrink: 0;
+  opacity: 0.55;
+  color: var(--text, #f0ece3);
+  display: block;
+}
+.bbc-search-form-v2 .bbc-search-input-clean-v2,
+.bbc-search-form-v2 .bbc-search-select-clean-v2 {
+  background: transparent !important;
+  color: var(--text, #f0ece3) !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  font-family: var(--font-body, Inter, sans-serif) !important;
+  flex: 1;
+  min-width: 0;
+}
+.bbc-search-form-v2 .bbc-search-input-clean-v2::placeholder {
+  color: var(--text-muted, #8a9bb0) !important;
+}
+.bbc-search-form-v2 .bbc-search-select-clean-v2 option {
+  background: var(--bg, #0a0f1a);
+  color: var(--text, #f0ece3);
+}
+.bbc-search-form-v2 .bbc-search-divider-v2 {
+  background: rgba(255, 255, 255, 0.1) !important;
+  width: 1px !important;
+  margin: 10px 0 !important;
+}
+.bbc-search-form-v2 .bbc-search-submit-btn-v2 {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  background: var(--primary, #d9b230) !important;
+  color: #0a0f1a !important;
+  font-weight: 700 !important;
+  font-size: 0.875rem !important;
+  letter-spacing: 0.04em;
+  border-radius: 12px !important;
+  padding: 0.875rem 1.75rem !important;
+  border: none !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  cursor: pointer;
+  transition: background 0.35s ease, transform 0.35s ease;
+}
+.bbc-search-form-v2 .bbc-search-submit-btn-v2:hover {
+  background: #f0c840 !important;
+  transform: translateY(-1px);
+}
+/* Date inputs on dark theme */
+.bbc-search-form-v2 .bbc-date-input { color-scheme: dark; }
+
+/* ── Flatpickr calendar — OC dark theme ───────────────────── */
+.flatpickr-calendar {
+  background: rgba(10, 15, 26, 0.97) !important;
+  border: 1px solid rgba(217, 178, 48, 0.2) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6) !important;
+  color: #f0ece3 !important;
+}
+.flatpickr-months,
+.flatpickr-month {
+  background: transparent !important;
+  color: #f0ece3 !important;
+  fill: #f0ece3 !important;
+}
+.flatpickr-current-month,
+.flatpickr-current-month .cur-month,
+.flatpickr-current-month input.cur-year {
+  color: #f0ece3 !important;
+}
+.flatpickr-prev-month svg,
+.flatpickr-next-month svg {
+  fill: #d9b230 !important;
+}
+.flatpickr-prev-month:hover svg,
+.flatpickr-next-month:hover svg {
+  fill: #f0c840 !important;
+}
+.flatpickr-weekdays,
+span.flatpickr-weekday {
+  background: transparent !important;
+  color: var(--primary, #d9b230) !important;
+  font-weight: 700;
+}
+.flatpickr-day {
+  color: #f0ece3 !important;
+  border-color: transparent !important;
+}
+.flatpickr-day:hover {
+  background: rgba(217, 178, 48, 0.15) !important;
+  border-color: rgba(217, 178, 48, 0.3) !important;
+}
+.flatpickr-day.selected,
+.flatpickr-day.selected:hover,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+  background: var(--primary, #d9b230) !important;
+  border-color: var(--primary, #d9b230) !important;
+  color: #0a0f1a !important;
+  font-weight: 700;
+}
+.flatpickr-day.inRange {
+  background: rgba(217, 178, 48, 0.12) !important;
+  border-color: transparent !important;
+  box-shadow: -5px 0 0 rgba(217, 178, 48, 0.12), 5px 0 0 rgba(217, 178, 48, 0.12) !important;
+}
+.flatpickr-day.flatpickr-disabled,
+.flatpickr-day.prevMonthDay,
+.flatpickr-day.nextMonthDay {
+  color: rgba(148, 163, 184, 0.35) !important;
+}
+.flatpickr-time input,
+.flatpickr-time .flatpickr-am-pm {
+  background: transparent !important;
+  color: #f0ece3 !important;
+}
+
+/* Responsive: BBC search */
+@media (max-width: 768px) {
+  .bbc-search-form-v2 {
+    border-radius: 14px !important;
+    padding: 0.75rem !important;
+  }
+  .bbc-search-form-v2 .bbc-search-divider-v2 {
+    height: 1px !important;
+    width: 100% !important;
+  }
+  .bbc-search-form-v2 .bbc-search-submit-btn-v2 {
+    justify-content: center;
+    padding: 1rem 1.5rem !important;
+    border-radius: 10px !important;
+  }
+}
+
+/* ============================================================
+   BBC BOAT GRID — Ocean Charter luxury theme overrides
+   Scoped to .bbc-boat-listing-widget to avoid affecting
+   BBC's own archive/search pages.
+   ============================================================ */
+.bbc-boat-listing-widget .bbc-boats-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+.bbc-boat-listing-widget .bbc-boat-card {
+  background: var(--surface) !important;
+  border: 1px solid rgba(255,255,255,0.07) !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3) !important;
+  padding: 0 !important;
+}
+.bbc-boat-listing-widget .bbc-boat-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5) !important;
+  border-color: rgba(217,178,48,0.35) !important;
+}
+.bbc-boat-listing-widget .bbc-boat-card-link {
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+.bbc-boat-listing-widget .bbc-boat-image-wrap {
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  position: relative;
+}
+.bbc-boat-listing-widget .bbc-boat-image-wrap img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.45s ease;
+}
+.bbc-boat-listing-widget .bbc-boat-card:hover .bbc-boat-image-wrap img {
+  transform: scale(1.05);
+}
+.bbc-boat-listing-widget .bbc-boat-type {
+  position: absolute !important; top: 12px; left: 12px;
+  background: rgba(10,16,26,0.82) !important;
+  color: var(--gold) !important;
+  font-size: 10px !important; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 10px !important; border-radius: 20px !important;
+  border: 1px solid rgba(217,178,48,0.35);
+}
+.bbc-boat-listing-widget .bbc-boat-content {
+  padding: 20px 22px 22px !important;
+}
+.bbc-boat-listing-widget .bbc-name-price-row {
+  display: flex; align-items: flex-start;
+  justify-content: space-between; gap: 12px;
+  margin-bottom: 8px;
+}
+.bbc-boat-listing-widget .bbc-boat-name {
+  font-family: var(--font-heading) !important;
+  font-size: 18px !important; font-weight: 600 !important;
+  color: var(--text-light) !important;
+  margin: 0;
+}
+.bbc-boat-listing-widget .bbc-price-amount {
+  font-size: 14px !important; font-weight: 700 !important;
+  color: var(--gold) !important; white-space: nowrap;
+}
+.bbc-boat-listing-widget .bbc-price-slash,
+.bbc-boat-listing-widget .bbc-price-unit { font-size: 12px; color: var(--text-muted); }
+.bbc-boat-listing-widget .bbc-boat-location {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 13px; color: var(--text-muted) !important;
+}
+.bbc-boat-listing-widget .bbc-boat-location svg { stroke: var(--gold); width: 13px; height: 13px; }
+.bbc-boat-listing-widget .bbc-boat-excerpt {
+  font-size: 13px; color: var(--text-muted); margin-top: 8px; line-height: 1.6;
+}
+.bbc-boat-listing-widget .bbc-boat-specs {
+  display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 12px 0;
+}
+.bbc-boat-listing-widget .bbc-spec-item {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 12px; color: var(--text-muted) !important;
+}
+.bbc-boat-listing-widget .bbc-spec-item svg { stroke: var(--gold); width: 13px; height: 13px; flex-shrink: 0; }
+.bbc-boat-listing-widget .bbc-boat-footer {
+  margin-top: 14px; padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex; gap: 8px;
+}
+/* "Quick Book" primary button — matches Stitch bg-primary text-background-dark style */
+.bbc-boat-listing-widget .bbc-book-btn {
+  flex: 2;
+  display: block;
+  text-align: center;
+  font-size: 11px !important; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: #0a0c10 !important;
+  background: var(--primary) !important;
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 10px 16px !important;
+  transition: background 0.2s, transform 0.15s;
+}
+.bbc-boat-listing-widget .bbc-boat-card:hover .bbc-book-btn {
+  background: var(--primary-hover) !important;
+  color: #0a0c10 !important;
+}
+/* Secondary "Details" link alongside Quick Book */
+.bbc-boat-listing-widget .bbc-boat-footer::before {
+  content: 'Details';
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: default;
+  transition: background 0.2s;
+}
+.bbc-boat-listing-widget .bbc-boat-card:hover .bbc-boat-footer::before {
+  background: rgba(255,255,255,0.14);
+}
+.bbc-boat-listing-widget .bbc-boat-grid-title {
+  color: var(--text-light) !important; font-family: var(--font-heading) !important;
+  text-align: center; margin-bottom: 40px !important;
+}
+.bbc-boat-listing-widget .bbc-no-results { color: var(--text-muted); text-align: center; padding: 4rem 0; }
+@media (max-width: 1024px) { .bbc-boat-listing-widget .bbc-boats-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 640px)  { .bbc-boat-listing-widget .bbc-boats-grid { grid-template-columns: 1fr; } }
+
+/* ============================================================
+   FLEET PAGE — Stitch-exact design
+   ============================================================ */
+
+/* Page wrapper */
+.fl-page { padding: 40px 0 80px; }
+.fl-page .oc-container { max-width: 1280px; }
+
+/* Header section */
+.fl-header { margin-bottom: 40px; }
+.fl-header h1 {
+  font-family: var(--font-body);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  color: var(--text-light);
+  margin: 0 0 12px;
+  letter-spacing: -0.02em;
+}
+.fl-header p {
+  color: var(--text-muted);
+  font-size: 1.125rem;
+  max-width: 640px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Glass filter bar */
+.fl-filters {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 48px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.fl-filter-group {
+  flex: 1;
+  min-width: 0;
+}
+
+.fl-filter-group label {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--primary);
+  font-weight: 700;
+  margin-bottom: 6px;
+  padding-left: 4px;
+}
+
+.fl-filter-group .fl-select-wrap {
+  position: relative;
+}
+
+.fl-filter-group select {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 10px 40px 10px 16px;
+  font-size: 14px;
+  color: var(--text);
+  font-family: var(--font-body);
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+}
+
+.fl-filter-group select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.fl-filter-group select option {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.fl-select-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--text-muted);
+  width: 18px;
+  height: 18px;
+}
+
+.fl-more-filters {
+  background: rgba(217,178,48,0.15);
+  border: 1px solid rgba(217,178,48,0.3);
+  color: var(--primary);
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+}
+
+.fl-more-filters:hover {
+  background: rgba(217,178,48,0.25);
+}
+
+/* Yacht grid */
+.fl-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+/* Fleet card — dark themed */
+.fl-card {
+  background: rgba(255,255,255,0.05);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.3s ease;
+}
+
+.fl-card:hover {
+  border-color: rgba(217,178,48,0.5);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card);
+}
+
+/* Card image */
+.fl-card__image {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.fl-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.fl-card:hover .fl-card__image img {
+  transform: scale(1.1);
+}
+
+.fl-card__image-bg {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.5s ease;
+}
+
+.fl-card:hover .fl-card__image-bg {
+  transform: scale(1.1);
+}
+
+/* Condition badge */
+.fl-card__badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 3;
+  background: var(--primary);
+  color: var(--secondary);
+  font-size: 10px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Image gradient overlay */
+.fl-card__overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  background: linear-gradient(to top, rgba(10,16,26,0.8) 0%, transparent 100%);
+  z-index: 2;
+}
+
+/* Star rating */
+.fl-card__rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.fl-card__rating svg {
+  width: 14px;
+  height: 14px;
+  color: var(--primary);
+  fill: var(--primary);
+}
+
+.fl-card__rating-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.fl-card__rating-count {
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  margin-left: 4px;
+}
+
+/* Card content area */
+.fl-card__content {
+  padding: 24px;
+}
+
+.fl-card__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.fl-card__name {
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-light);
+  margin: 0;
+  line-height: 1.3;
+  transition: color var(--transition-fast);
+}
+
+.fl-card:hover .fl-card__name {
+  color: var(--primary);
+}
+
+.fl-card__price {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--text-light);
+  white-space: nowrap;
+}
+
+.fl-card__price-unit {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+/* Meta row (guests + location) */
+.fl-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.fl-card__meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.fl-card__meta-item svg {
+  width: 18px;
+  height: 18px;
+  opacity: 0.7;
+}
+
+/* Dual action buttons */
+.fl-card__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.fl-card__btn-details {
+  flex: 1;
+  min-width: 30%;
+  background: rgba(255,255,255,0.1);
+  color: var(--text-light);
+  padding: 12px 0;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  text-align: center;
+  text-decoration: none;
+  transition: background var(--transition-fast);
+  display: block;
+}
+
+.fl-card__btn-details:hover {
+  background: rgba(255,255,255,0.2);
+  color: var(--text-light);
+  text-decoration: none;
+}
+
+.fl-card__btn-book {
+  flex: 2;
+  min-width: 60%;
+  background: var(--primary);
+  color: var(--secondary);
+  padding: 12px 0;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  transition: background var(--transition-fast);
+  display: block;
+}
+
+.fl-card__btn-book:hover {
+  background: var(--primary-hover);
+  color: var(--secondary);
+  text-decoration: none;
+}
+
+/* Status bar */
+.fl-status {
+  margin-top: 64px;
+  padding: 32px;
+  border-radius: 24px;
+  border: 1px solid rgba(217,178,48,0.2);
+  background: rgba(217,178,48,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.fl-status__left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.fl-status__icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(217,178,48,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.fl-status__icon svg {
+  width: 28px;
+  height: 28px;
+  color: var(--primary);
+}
+
+.fl-status__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-light);
+  margin: 0 0 4px;
+}
+
+.fl-status__desc {
+  color: var(--text-muted);
+  margin: 0;
+  font-size: 14px;
+}
+
+.fl-status__right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fl-status__pulse {
+  position: relative;
+  width: 12px;
+  height: 12px;
+}
+
+.fl-status__pulse::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: fl-ping 1.5s infinite;
+}
+
+.fl-status__pulse::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+@keyframes fl-ping {
+  0% { transform: scale(1); opacity: 1; }
+  75%, 100% { transform: scale(2.5); opacity: 0; }
+}
+
+.fl-status__live {
+  font-size: 14px;
+  font-weight: 600;
+  color: #22c55e;
+}
+
+/* No results */
+.fl-no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 48px 0;
+  color: var(--text-muted);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,0.03);
+}
+
+.fl-no-results a {
+  color: var(--primary);
+}
+
+/* Fleet page responsive */
+@media (max-width: 1024px) {
+  .fl-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+}
+
+@media (max-width: 768px) {
+  .fl-grid { grid-template-columns: 1fr; gap: 20px; }
+  .fl-filters { flex-direction: column; }
+  .fl-filter-group { min-width: 100%; }
+  .fl-status { flex-direction: column; text-align: center; }
+  .fl-status__left { flex-direction: column; }
+}
+
+@media (max-width: 480px) {
+  .fl-page { padding: 24px 0 48px; }
+  .fl-card__content { padding: 16px; }
+  .fl-card__name { font-size: 1rem; }
+  .fl-card__price { font-size: 1rem; }
+  .fl-card__meta { font-size: 13px; gap: 10px; margin-bottom: 16px; }
+  .fl-card__actions { flex-direction: column; }
+  .fl-card__btn-details, .fl-card__btn-book { min-width: 100%; padding: 10px 0; }
+  .fl-header h1 { font-size: clamp(1.5rem, 6vw, 2.2rem); }
+}
+
+@media (max-width: 380px) {
+  .fl-card__row { flex-direction: column; gap: 4px; }
+}
+
+/* ============================================================
+   YACHT DETAIL PAGE — Stitch "The Azure Muse" design
+   ============================================================ */
+
+.yacht-detail { background: var(--secondary); }
+
+/* ── Hero Image Grid ── */
+.yd-hero { padding: 0; }
+.yd-hero__grid {
+  display: grid;
+  grid-template-columns: 8fr 4fr;
+  gap: 6px;
+  min-height: 520px;
+  max-height: 80vh;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+}
+.yd-hero__main { position: relative; overflow: hidden; }
+.yd-hero__main .yd-hero__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.yd-hero__side { display: flex; flex-direction: column; gap: 6px; }
+.yd-hero__thumb { position: relative; flex: 1; overflow: hidden; min-height: 0; }
+.yd-hero__thumb .yd-hero__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.yd-hero__img--placeholder { background: linear-gradient(160deg, #091522 0%, #152540 50%, #0a1825 100%); min-height: 200px; }
+.yd-hero__more {
+  position: absolute; inset: 0;
+  background: rgba(10,16,26,0.55);
+  backdrop-filter: blur(4px);
+  color: var(--text-light);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--font-body); font-size: 14px; font-weight: 600;
+  border: none; cursor: pointer; transition: background var(--transition-fast);
+}
+.yd-hero__more:hover { background: rgba(10,16,26,0.7); }
+.yd-hero__more .material-symbols-outlined { font-size: 20px; }
+
+/* ── Gallery Lightbox Modal ── */
+.yd-gallery-modal {
+  position: fixed; inset: 0; z-index: 99999;
+  display: flex; align-items: center; justify-content: center;
+}
+.yd-gallery-modal[hidden] { display: none; }
+.yd-gallery-modal__backdrop {
+  position: absolute; inset: 0; background: rgba(0,0,0,0.92);
+}
+.yd-gallery-modal__close {
+  position: absolute; top: 20px; right: 20px; z-index: 3;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background 0.2s;
+}
+.yd-gallery-modal__close:hover { background: rgba(255,255,255,0.2); }
+.yd-gallery-modal__nav {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; width: 48px; height: 48px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background 0.2s;
+}
+.yd-gallery-modal__nav:hover { background: rgba(255,255,255,0.2); }
+.yd-gallery-modal__prev { left: 20px; }
+.yd-gallery-modal__next { right: 20px; }
+.yd-gallery-modal__stage {
+  position: relative; z-index: 2;
+  max-width: 90vw; max-height: 85vh;
+}
+.yd-gallery-modal__img {
+  max-width: 90vw; max-height: 85vh; object-fit: contain;
+  border-radius: 8px; display: block;
+}
+.yd-gallery-modal__counter {
+  position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+  z-index: 3; color: rgba(255,255,255,0.7); font-size: 14px; font-weight: 600;
+}
+
+/* ── Intro / Title + Specs ── */
+.yd-intro { padding: 40px 0 0; }
+.yd-breadcrumb {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--text-muted); margin-bottom: 24px; flex-wrap: wrap;
+}
+.yd-breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color var(--transition-fast); }
+.yd-breadcrumb a:hover { color: var(--primary); }
+.yd-breadcrumb > span:last-child { color: var(--text-light); }
+
+.yd-intro__header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 24px; flex-wrap: wrap; margin-bottom: 32px;
+}
+.yd-intro__builder {
+  font-size: 12px; color: var(--primary); text-transform: uppercase;
+  letter-spacing: 0.12em; font-weight: 700; display: block; margin-bottom: 6px;
+}
+.yd-intro__title {
+  font-family: var(--font-heading); font-size: clamp(32px, 5vw, 56px);
+  font-weight: 400; font-style: italic; color: var(--text-light);
+  margin: 0 0 10px; line-height: 1.1;
+}
+.yd-intro__loc {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 15px; color: var(--text-muted);
+}
+.yd-intro__loc .material-symbols-outlined { font-size: 18px; color: var(--primary); }
+.yd-intro__rating { display: flex; align-items: center; gap: 8px; padding-top: 12px; }
+.yd-intro__stars { color: var(--primary); font-size: 18px; font-weight: 700; }
+.yd-intro__review-count { color: var(--text-muted); font-size: 14px; }
+
+/* Quick Specs */
+.yd-specs {
+  display: flex; gap: 10px; flex-wrap: wrap;
+}
+.yd-spec {
+  flex: 1; min-width: 120px; display: flex; align-items: center; gap: 12px;
+  padding: 20px 24px;
+  background: var(--surface); border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+}
+.yd-spec__icon { font-size: 22px; color: var(--primary); }
+.yd-spec__text { display: flex; flex-direction: column; }
+.yd-spec__val {
+  font-family: var(--font-heading); font-size: 20px; font-style: italic;
+  color: var(--text-light); line-height: 1.2;
+}
+.yd-spec__lbl { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+/* ── Body Layout ── */
+.yd-body { padding: 60px 0 100px; }
+.yd-body__inner { display: grid; grid-template-columns: 1fr 400px; gap: 60px; align-items: start; }
+.yd-content { display: flex; flex-direction: column; gap: 64px; }
+
+/* Section headings — Stitch serif italic */
+.yd-section__title {
+  font-family: var(--font-heading); font-size: clamp(24px, 3vw, 34px);
+  color: var(--text-light); font-weight: 400; margin: 0 0 28px; line-height: 1.2;
+}
+.yd-section__title em { font-style: italic; }
+.yd-section__rating {
+  color: var(--primary); font-size: 18px; font-style: normal; margin-left: 12px;
+}
+.yd-section__rating small { color: var(--text-muted); font-size: 14px; }
+
+/* Description */
+.yd-description { color: var(--text-muted); line-height: 1.9; font-size: 16px; }
+.yd-description p { margin-bottom: 20px; }
+
+/* ── Amenities Grid ── */
+.yd-amenities-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px 16px; }
+.yd-amenity {
+  display: flex; align-items: center; gap: 8px;
+  color: var(--text-muted); font-size: 13px;
+  padding: 6px 0;
+}
+.yd-amenity__icon { font-size: 20px; color: var(--primary); flex-shrink: 0; }
+.yd-amenity__text { line-height: 1.3; }
+
+/* ── Captain ── */
+.yd-captain__card {
+  display: flex; gap: 24px; align-items: flex-start;
+  background: var(--surface); border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg); padding: 32px;
+}
+.yd-captain__avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--surface-2), var(--glass-bg));
+  border: 2px solid var(--primary); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.yd-captain__avatar .material-symbols-outlined { font-size: 36px; color: var(--primary); }
+.yd-captain__name {
+  font-family: var(--font-heading); font-size: 22px; color: var(--text-light);
+  margin: 0 0 12px; font-weight: 600;
+}
+.yd-captain__bio p { color: var(--text-muted); line-height: 1.7; font-size: 15px; margin-bottom: 16px; }
+.yd-captain__credentials { display: flex; gap: 10px; flex-wrap: wrap; }
+.yd-captain__credentials span {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: rgba(217,178,48,0.08); border: 1px solid rgba(217,178,48,0.2);
+  color: var(--primary); padding: 5px 12px; border-radius: var(--radius-full);
+  font-size: 12px; font-weight: 600;
+}
+.yd-captain__credentials .material-symbols-outlined { font-size: 14px; }
+
+/* ── Reviews Grid ── */
+.yd-reviews-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.yd-review-card {
+  background: var(--surface); border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg); padding: 28px;
+}
+.yd-review-card__stars { color: var(--primary); font-size: 14px; margin-bottom: 12px; letter-spacing: 2px; }
+.yd-review-card__title { color: var(--text-light); font-size: 16px; margin: 0 0 8px; font-weight: 600; }
+.yd-review-card__text { color: var(--text-muted); font-style: italic; line-height: 1.7; font-size: 14px; margin-bottom: 20px; }
+.yd-review-card__author { display: flex; align-items: center; gap: 12px; }
+.yd-review-card__avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--surface-2); border: 1px solid var(--glass-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; color: var(--primary);
+}
+.yd-review-card__author cite { display: block; color: var(--text-light); font-style: normal; font-weight: 600; font-size: 14px; }
+.yd-review-card__author span { color: var(--text-muted); font-size: 12px; }
+.yd-reviews-empty { color: var(--text-muted); font-size: 15px; grid-column: 1 / -1; }
+
+/* ── Booking Sidebar ── */
+.yd-sidebar { position: sticky; top: 100px; display: flex; flex-direction: column; gap: 20px; }
+.yd-booking-wrap {
+  border-radius: var(--radius-lg); overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════════════
+   BBC BOOKING FORM — Ocean Charter Dark/Gold Theme
+   Override the plugin's blue/white scheme to match
+   the dark luxury aesthetic.
+   ═══════════════════════════════════════════════════ */
+
+/* Container — remap BBC CSS variables to theme tokens */
+.yacht-detail .bbc-booking-form-container {
+  --bbc-primary: var(--primary);
+  --bbc-secondary: var(--primary-dark);
+  --bbc-accent: var(--primary-hover);
+  --bbc-text: var(--text-light);
+  --bbc-text-light: var(--text-muted);
+  --bbc-border: var(--glass-border);
+  margin-top: 0;
+}
+
+/* Widget body — dark glass instead of white */
+.yacht-detail .bbc-booking-form-container .bbc-booking-widget {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  font-family: var(--font-body);
+  padding: 24px;
+}
+
+/* ── Step Indicator ── */
+.yacht-detail .bbc-booking-form-container .bbc-booking-steps {
+  border-bottom-color: var(--glass-border);
+}
+.yacht-detail .bbc-booking-form-container .bbc-step-number {
+  background: var(--surface-2); color: var(--text-muted);
+}
+.yacht-detail .bbc-booking-form-container .bbc-step.active .bbc-step-number {
+  background: var(--primary); color: var(--secondary);
+  box-shadow: 0 2px 8px rgba(217,178,48,0.3);
+}
+.yacht-detail .bbc-booking-form-container .bbc-step-label {
+  color: var(--text-muted);
+}
+.yacht-detail .bbc-booking-form-container .bbc-step-title {
+  color: var(--text-light);
+  font-family: var(--font-heading);
+}
+
+/* ── Booking Mode Notice ── */
+.yacht-detail .bbc-booking-mode-notice.bbc-mode-instant {
+  background: rgba(46,125,50,0.15); border-color: rgba(76,175,80,0.3); color: #81c784;
+}
+.yacht-detail .bbc-booking-mode-notice.bbc-mode-manual {
+  background: rgba(255,152,0,0.12); border-color: rgba(255,152,0,0.3); color: #ffb74d;
+}
+
+/* ── Booking Type Options (Hourly / Daily / Weekly) ── */
+.yacht-detail .bbc-booking-form-container .bbc-type-option label {
+  background: var(--surface); border-color: var(--glass-border);
+  box-shadow: none; color: var(--text-light);
+}
+.yacht-detail .bbc-booking-form-container .bbc-type-option label:hover {
+  border-color: var(--primary);
+  box-shadow: 0 4px 8px rgba(217,178,48,0.1);
+}
+.yacht-detail .bbc-booking-form-container .bbc-type-option.active label,
+.yacht-detail .bbc-booking-form-container .bbc-type-option input:checked+label {
+  border-color: var(--primary);
+  background: rgba(217,178,48,0.08);
+  box-shadow: 0 4px 12px rgba(217,178,48,0.15);
+}
+.yacht-detail .bbc-booking-form-container .bbc-type-icon,
+.yacht-detail .bbc-booking-form-container .bbc-type-icon svg {
+  color: var(--primary); stroke: var(--primary);
+}
+.yacht-detail .bbc-booking-form-container .bbc-type-name {
+  color: var(--text-light);
+}
+.yacht-detail .bbc-booking-form-container .bbc-type-price,
+.yacht-detail .bbc-booking-form-container .bbc-type-option[data-type="hourly"] .bbc-type-price {
+  color: var(--text-light);
+}
+
+/* ── Duration Buttons ── */
+.yacht-detail .bbc-booking-form-container .bbc-duration-options label {
+  color: var(--text-muted);
+}
+.yacht-detail .bbc-booking-form-container .bbc-duration-btn {
+  background: var(--surface); border-color: var(--glass-border); color: var(--text-light);
+}
+.yacht-detail .bbc-booking-form-container .bbc-duration-btn:hover {
+  border-color: var(--primary) !important; background: rgba(217,178,48,0.06);
+}
+.yacht-detail .bbc-booking-form-container .bbc-duration-btn.active {
+  border-color: var(--primary); color: var(--secondary);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  box-shadow: 0 2px 8px rgba(217,178,48,0.25);
+}
+.yacht-detail .bbc-booking-form-container .bbc-duration-btn .dur-hours {
+  color: var(--text-light);
+}
+.yacht-detail .bbc-booking-form-container .bbc-duration-btn.active .dur-hours {
+  color: var(--secondary);
+}
+.yacht-detail .bbc-booking-form-container .bbc-dur-price {
+  color: var(--text-light);
+}
+.yacht-detail .bbc-booking-form-container .bbc-duration-btn.active .bbc-dur-price {
+  color: var(--secondary);
+}
+
+/* ── Calendar ── */
+.yacht-detail .bbc-price-calendar {
+  background: var(--surface); border-color: var(--glass-border);
+}
+.yacht-detail .bbc-cal-header {
+  background: var(--surface-2); border-bottom-color: var(--glass-border);
+}
+.yacht-detail .bbc-cal-month-label { color: var(--text-light); }
+.yacht-detail .bbc-cal-nav {
+  background: var(--surface); border-color: var(--glass-border); color: var(--primary);
+}
+.yacht-detail .bbc-cal-nav:hover {
+  background: rgba(217,178,48,0.1); border-color: var(--primary);
+}
+.yacht-detail .bbc-cal-weekdays {
+  background: var(--surface-2); border-bottom-color: var(--glass-border);
+}
+.yacht-detail .bbc-cal-weekday { color: var(--text-muted); }
+
+/* Date cards */
+.yacht-detail .bbc-date-card {
+  background: var(--surface); border-color: rgba(255,255,255,0.05);
+}
+.yacht-detail .bbc-date-card:hover:not(.bbc-date-disabled):not(.bbc-date-empty) {
+  border-color: var(--primary); background: rgba(217,178,48,0.08);
+  box-shadow: 0 3px 10px rgba(217,178,48,0.15);
+}
+.yacht-detail .bbc-date-card.bbc-date-disabled { background: var(--surface); }
+.yacht-detail .bbc-date-card.bbc-date-weekend:not(.bbc-date-disabled) {
+  background: rgba(217,178,48,0.03);
+}
+.yacht-detail .bbc-card-day { color: var(--text-light); }
+.yacht-detail .bbc-card-price {
+  color: var(--primary); background: rgba(217,178,48,0.12);
+}
+.yacht-detail .bbc-card-price.bbc-card-closed {
+  background: rgba(255,255,255,0.05); color: var(--text-muted);
+}
+
+/* Selected date */
+.yacht-detail .bbc-date-card.bbc-date-selected {
+  background: var(--primary) !important; border-color: var(--primary) !important;
+  box-shadow: 0 4px 14px rgba(217,178,48,0.35);
+}
+.yacht-detail .bbc-date-card.bbc-date-selected .bbc-card-day { color: var(--secondary); }
+.yacht-detail .bbc-date-card.bbc-date-selected .bbc-card-price {
+  background: rgba(10,16,26,0.85); color: var(--primary);
+}
+
+/* Date range */
+.yacht-detail .bbc-date-card.bbc-date-in-range {
+  background: rgba(217,178,48,0.1); border-color: rgba(217,178,48,0.25);
+}
+.yacht-detail .bbc-date-card.bbc-date-in-range .bbc-card-day { color: var(--primary); }
+
+/* ── Time Picker ── */
+.yacht-detail .bbc-time-picker-wrapper h5 { color: var(--text-muted); }
+.yacht-detail .bbc-time-btn {
+  background: var(--surface); border-color: var(--glass-border); color: var(--text-light);
+}
+.yacht-detail .bbc-time-btn:hover {
+  border-color: var(--primary); background: rgba(217,178,48,0.06); color: var(--primary);
+}
+.yacht-detail .bbc-time-btn.active {
+  border-color: var(--primary);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: var(--secondary); box-shadow: 0 2px 8px rgba(217,178,48,0.3);
+}
+.yacht-detail .bbc-time-btn.blocked {
+  background: var(--surface-2); border-color: var(--glass-border); color: var(--text-muted);
+}
+
+/* ── Session Selector (Half Day) ── */
+.yacht-detail .bbc-session-selector {
+  background: var(--surface); border-color: var(--glass-border);
+}
+.yacht-detail .bbc-session-selector label { color: var(--text-muted); }
+.yacht-detail .bbc-session-btn {
+  background: var(--surface-2); border-color: var(--glass-border);
+}
+.yacht-detail .bbc-session-btn .session-time { color: var(--text-muted); }
+.yacht-detail .bbc-session-btn .session-label { color: var(--text-light); }
+.yacht-detail .bbc-session-btn:hover {
+  border-color: var(--primary); background: rgba(217,178,48,0.08);
+}
+.yacht-detail .bbc-session-btn.active {
+  border-color: var(--primary); background: var(--primary);
+}
+.yacht-detail .bbc-session-btn.active .session-time,
+.yacht-detail .bbc-session-btn.active .session-label { color: var(--secondary); }
+
+/* ── Month Grid ── */
+.yacht-detail .bbc-month-box {
+  background: var(--surface); border-color: var(--glass-border); color: var(--text-light);
+}
+.yacht-detail .bbc-month-box span { color: var(--text-muted); }
+.yacht-detail .bbc-month-box:hover {
+  border-color: var(--primary); background: rgba(217,178,48,0.08); color: var(--primary);
+}
+.yacht-detail .bbc-month-box.active {
+  border-color: var(--primary); background: var(--primary); color: var(--secondary);
+}
+.yacht-detail .bbc-month-box.active span { color: rgba(10,16,26,0.7); }
+.yacht-detail .bbc-month-select {
+  background: var(--surface); border-color: var(--glass-border); color: var(--text-light);
+}
+.yacht-detail .bbc-month-select:hover,
+.yacht-detail .bbc-month-select:focus {
+  border-color: var(--primary); box-shadow: 0 0 0 3px rgba(217,178,48,0.1);
+}
+
+/* ── Guests Section ── */
+.yacht-detail .bbc-booking-form-container .bbc-guests-section label { color: var(--text-muted); }
+.yacht-detail .bbc-booking-form-container .bbc-guests-select {
+  background: var(--surface); border-color: var(--glass-border); color: var(--text-light);
+}
+.yacht-detail .bbc-booking-form-container .bbc-guests-select:hover,
+.yacht-detail .bbc-booking-form-container .bbc-guests-select:focus {
+  border-color: var(--primary); box-shadow: 0 0 0 3px rgba(217,178,48,0.1);
+}
+.yacht-detail .bbc-booking-form-container .bbc-guests-select option {
+  background: var(--surface); color: var(--text-light);
+}
+
+/* ── Price Summary Box ── */
+.yacht-detail .bbc-booking-form-container .bbc-price-summary-box {
+  background: var(--surface-2); border-color: var(--glass-border);
+}
+.yacht-detail .bbc-booking-form-container .bbc-price-summary-box .bbc-summary-row {
+  color: var(--text-muted);
+}
+.yacht-detail .bbc-booking-form-container .bbc-price-summary-box .bbc-summary-row.bbc-total-row {
+  border-top-color: var(--primary); color: var(--text-light);
+}
+.yacht-detail .bbc-booking-form-container .bbc-price-summary-box .bbc-summary-total {
+  color: var(--primary);
+}
+
+/* ── Range Summary (Daily) ── */
+.yacht-detail .bbc-range-summary {
+  background: var(--surface-2); border-color: var(--glass-border);
+}
+.yacht-detail .bbc-range-days { color: var(--primary); }
+
+/* ── Daily Hint ── */
+.yacht-detail .bbc-daily-hint {
+  background: var(--surface-2); color: var(--text-muted); border-left-color: var(--primary);
+}
+
+/* ── Weekly Badge ── */
+.yacht-detail .bbc-weekly-badge {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: var(--secondary);
+}
+.yacht-detail .bbc-weekly-hint { color: var(--text-muted); }
+
+/* ── Navigation Buttons ── */
+.yacht-detail .bbc-booking-form-container .bbc-btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: var(--secondary); box-shadow: 0 2px 8px rgba(217,178,48,0.3);
+  font-family: var(--font-body);
+}
+.yacht-detail .bbc-booking-form-container .bbc-btn-primary:hover {
+  box-shadow: 0 4px 12px rgba(217,178,48,0.4);
+}
+.yacht-detail .bbc-booking-form-container .bbc-btn-outline {
+  background: var(--surface); color: var(--text-muted); border-color: var(--glass-border);
+}
+.yacht-detail .bbc-booking-form-container .bbc-btn-outline:hover {
+  border-color: var(--primary); color: var(--primary); background: rgba(217,178,48,0.06);
+}
+
+/* ── Step 2: Form Fields ── */
+.yacht-detail .bbc-booking-form-container .bbc-date-section h4 { color: var(--text-muted); }
+.yacht-detail .bbc-booking-form-container .bbc-guest-fields {
+  display: flex; flex-direction: column; gap: 0;
+}
+.yacht-detail .bbc-booking-form-container .bbc-field-group {
+  margin-bottom: 16px;
+}
+.yacht-detail .bbc-booking-form-container .bbc-form-group label,
+.yacht-detail .bbc-booking-form-container .bbc-field-group label {
+  color: var(--text-muted); display: block; margin-bottom: 6px; font-size: 13px;
+}
+.yacht-detail .bbc-booking-form-container .bbc-form-control,
+.yacht-detail .bbc-booking-form-container .bbc-field-group input,
+.yacht-detail .bbc-booking-form-container .bbc-field-group select,
+.yacht-detail .bbc-booking-form-container .bbc-field-group textarea {
+  background: var(--surface); border: 1px solid var(--glass-border); color: var(--text-light);
+  width: 100%; box-sizing: border-box; padding: 10px 14px; font-size: 14px;
+  border-radius: var(--radius); font-family: var(--font-body);
+  -webkit-appearance: none; appearance: none;
+}
+.yacht-detail .bbc-booking-form-container .bbc-field-group textarea {
+  resize: vertical; min-height: 80px;
+}
+.yacht-detail .bbc-booking-form-container .bbc-form-control:focus,
+.yacht-detail .bbc-booking-form-container .bbc-field-group input:focus,
+.yacht-detail .bbc-booking-form-container .bbc-field-group select:focus,
+.yacht-detail .bbc-booking-form-container .bbc-field-group textarea:focus {
+  border-color: var(--primary); box-shadow: 0 0 0 3px rgba(217,178,48,0.1); outline: none;
+}
+.yacht-detail .bbc-booking-form-container .bbc-booking-summary {
+  background: var(--surface); border: 1px solid var(--glass-border);
+  border-radius: var(--radius); padding: 16px; margin-top: 8px;
+}
+.yacht-detail .bbc-booking-form-container .bbc-booking-summary h4 {
+  color: var(--text-light); margin: 0 0 12px; font-size: 15px;
+}
+.yacht-detail .bbc-booking-form-container .bbc-summary-details p {
+  color: var(--text-muted); margin: 0 0 6px; font-size: 14px;
+}
+.yacht-detail .bbc-booking-form-container .bbc-summary-details strong {
+  color: var(--text-light);
+}
+.yacht-detail .bbc-booking-form-container .bbc-date-input,
+.yacht-detail .bbc-booking-form-container .bbc-time-select,
+.yacht-detail .bbc-booking-form-container .bbc-datetime-input {
+  background: var(--surface); border-color: var(--glass-border); color: var(--text-light);
+}
+.yacht-detail .bbc-booking-form-container .bbc-date-input:hover,
+.yacht-detail .bbc-booking-form-container .bbc-date-input:focus,
+.yacht-detail .bbc-booking-form-container .bbc-time-select:hover,
+.yacht-detail .bbc-booking-form-container .bbc-time-select:focus,
+.yacht-detail .bbc-booking-form-container .bbc-datetime-input:hover,
+.yacht-detail .bbc-booking-form-container .bbc-datetime-input:focus {
+  border-color: var(--primary); box-shadow: 0 0 0 3px rgba(217,178,48,0.1);
+}
+
+/* ── Step 2: Add-ons ── */
+.yacht-detail .bbc-addons-toggle {
+  background: rgba(217,178,48,0.08); border-color: rgba(217,178,48,0.2); color: var(--primary);
+}
+.yacht-detail .bbc-addons-toggle:hover {
+  background: rgba(217,178,48,0.12); border-color: var(--primary);
+}
+.yacht-detail .bbc-addons-count-chip {
+  background: var(--primary); color: var(--secondary);
+}
+.yacht-detail .bbc-addons-panel {
+  background: var(--surface); border-color: rgba(217,178,48,0.2);
+}
+.yacht-detail .bbc-addon-category-block { border-bottom-color: var(--glass-border); }
+.yacht-detail .bbc-category-toggle { color: var(--text-light); }
+.yacht-detail .bbc-category-toggle:hover { background: var(--surface-2); }
+.yacht-detail .bbc-cat-chevron { color: var(--text-muted); }
+.yacht-detail .bbc-addon-row { border-bottom-color: var(--glass-border); }
+.yacht-detail .bbc-addon-checkbox { accent-color: var(--primary); }
+.yacht-detail .bbc-addon-name { color: var(--text-light); }
+.yacht-detail .bbc-addon-desc { color: var(--text-muted); }
+.yacht-detail .bbc-addon-price-tag { color: var(--primary); }
+.yacht-detail .bbc-addon-price-tag small { color: var(--text-muted); }
+
+/* ── Step 3: Summary Card ── */
+.yacht-detail .bbc-summary-card {
+  background: var(--surface); border-color: var(--glass-border);
+  box-shadow: none;
+}
+.yacht-detail .bbc-summary-card-title {
+  background: var(--surface-2); border-bottom-color: var(--glass-border); color: var(--text-muted);
+}
+.yacht-detail .bbc-summary-line {
+  color: var(--text-muted); border-bottom-color: var(--glass-border);
+}
+.yacht-detail .bbc-summary-label { color: var(--text-muted); }
+.yacht-detail .bbc-summary-value { color: var(--text-light); }
+.yacht-detail .bbc-summary-divider { background: var(--glass-border); }
+.yacht-detail .bbc-summary-total-row { background: var(--surface-2); }
+.yacht-detail .bbc-summary-total-row .bbc-summary-label { color: var(--text-light); }
+.yacht-detail .bbc-summary-total-row .bbc-summary-value { color: var(--primary); }
+
+/* ── Step 3: Payment Cards ── */
+.yacht-detail .bbc-payment-method-section { background: transparent; }
+.yacht-detail .bbc-payment-method-section h4,
+.yacht-detail .bbc-payment-method-title { color: var(--text-muted); }
+.yacht-detail .bbc-payment-card {
+  background: var(--surface); border-color: var(--glass-border);
+}
+.yacht-detail .bbc-payment-card:hover { border-color: rgba(217,178,48,0.3); }
+.yacht-detail .bbc-payment-card:has(input:checked) {
+  border-color: var(--primary); background: rgba(217,178,48,0.06);
+}
+.yacht-detail .bbc-payment-option {
+  background: var(--surface); border-color: var(--glass-border);
+}
+.yacht-detail .bbc-payment-option:hover {
+  border-color: var(--primary); background: rgba(217,178,48,0.06);
+}
+.yacht-detail .bbc-payment-option:has(input:checked) {
+  border-color: var(--primary); background: rgba(217,178,48,0.08);
+}
+.yacht-detail .bbc-payment-label { color: var(--text-light); }
+.yacht-detail .bbc-payment-card-label { color: var(--text-light); }
+
+/* ── Step 3: Confirm Button ── */
+.yacht-detail .bbc-booking-form-container .bbc-btn-complete,
+.yacht-detail .bbc-booking-form-container .bbc-btn-submit {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: var(--secondary); box-shadow: 0 2px 8px rgba(217,178,48,0.3);
+}
+.yacht-detail .bbc-booking-form-container .bbc-btn-complete:hover,
+.yacht-detail .bbc-booking-form-container .bbc-btn-submit:hover {
+  box-shadow: 0 4px 16px rgba(217,178,48,0.4);
+}
+
+/* ── Note / Disclaimer ── */
+.yacht-detail .bbc-note { color: var(--text-muted); }
+
+/* ── Success Message ── */
+.yacht-detail .bbc-success-message h3 { color: #81c784; }
+.yacht-detail .bbc-success-message p { color: var(--text-muted); }
+.yacht-detail .bbc-success-message .bbc-ref { color: var(--primary); }
+
+/* ── Policies & Hours (if shown on detail page) ── */
+.yacht-detail .bbc-policy-item {
+  background: var(--surface); border-color: var(--glass-border); color: var(--text-light);
+}
+.yacht-detail .bbc-policy-item:hover { background: var(--surface-2); }
+.yacht-detail .bbc-hours-day {
+  background: var(--surface); border-color: var(--glass-border);
+}
+.yacht-detail .bbc-hours-day:hover { background: rgba(217,178,48,0.06); }
+.yacht-detail .bbc-hours-day-name { color: var(--text-light); }
+.yacht-detail .bbc-hours-day-time { color: var(--primary); }
+.yacht-detail .bbc-house-rules {
+  background: var(--surface); border-color: var(--glass-border); color: var(--text-muted);
+}
+.yacht-detail .bbc-house-rules-label { color: var(--text-light); }
+
+/* ── Price Summary (legacy) ── */
+.yacht-detail .bbc-booking-form-container .bbc-price-summary {
+  background: var(--surface-2);
+}
+.yacht-detail .bbc-booking-form-container .bbc-summary-row {
+  border-bottom-color: var(--glass-border); color: var(--text-muted);
+}
+.yacht-detail .bbc-booking-form-container .bbc-summary-row:last-child {
+  color: var(--text-light); border-top-color: var(--primary);
+}
+.yacht-detail .bbc-booking-form-container .bbc-total-price { color: var(--primary); }
+
+/* ── WhatsApp Button ── */
+.yd-whatsapp-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  background: #25D366; color: #fff; font-size: 15px; font-weight: 700;
+  font-family: var(--font-body); text-decoration: none;
+  padding: 14px 24px; border-radius: var(--radius-lg);
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+.yd-whatsapp-btn:hover { background: #1ebe57; transform: translateY(-1px); color: #fff; }
+.yd-whatsapp-btn svg { flex-shrink: 0; }
+
+/* Sidebar Charter Includes box */
+.yd-sidebar-box {
+  background: var(--surface); border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg); padding: 24px;
+}
+.yd-sidebar-box__title {
+  font-family: var(--font-heading); font-size: 18px; color: var(--text-light);
+  margin: 0 0 16px; font-weight: 500;
+}
+.yd-sidebar-box__list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.yd-sidebar-box__list li {
+  display: flex; align-items: center; gap: 10px;
+  color: var(--text-muted); font-size: 14px;
+}
+.yd-sidebar-box__list li::before { content: '✓'; color: var(--primary); font-weight: 700; }
+
+/* ── Related Vessels (Stitch fleet card style) ── */
+.yd-related { padding: 80px 0; border-top: 1px solid var(--glass-border); }
+.yd-related__header { text-align: center; margin-bottom: 48px; }
+.yd-related__title {
+  font-family: var(--font-heading); font-size: clamp(28px, 4vw, 40px);
+  color: var(--text-light); font-weight: 400; margin: 0;
+}
+.yd-related__title em { font-style: italic; }
+.yd-related__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+/* Card container */
+.yd-related-card {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-lg); overflow: hidden;
+  transition: all 0.3s ease;
+}
+.yd-related-card:hover { border-color: rgba(217,178,48,0.5); transform: translateY(-4px); box-shadow: var(--shadow-card); }
+
+/* Image — 4/3 landscape with gradient overlay */
+.yd-related-card__img-wrap {
+  position: relative; aspect-ratio: 4 / 3; overflow: hidden; display: block;
+}
+.yd-related-card__img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
+.yd-related-card:hover .yd-related-card__img { transform: scale(1.1); }
+.yd-related-card__img--placeholder { background: linear-gradient(135deg, #0d1828, #162030); width: 100%; height: 100%; }
+.yd-related-card__badge {
+  position: absolute; top: 16px; right: 16px; z-index: 3;
+  background: var(--primary); color: var(--secondary);
+  font-size: 10px; font-weight: 800; padding: 4px 12px;
+  border-radius: var(--radius-full); text-transform: uppercase; letter-spacing: 0.02em;
+}
+
+/* Gradient overlay at bottom of image for rating */
+.yd-related-card__overlay {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 16px;
+  background: linear-gradient(to top, rgba(10,16,26,0.8) 0%, transparent 100%);
+  z-index: 2;
+}
+.yd-related-card__rating { display: flex; align-items: center; gap: 4px; }
+.yd-related-card__rating svg { width: 14px; height: 14px; color: var(--primary); fill: var(--primary); }
+.yd-related-card__rating-val { font-size: 14px; font-weight: 700; color: var(--primary); }
+.yd-related-card__rating-count { font-size: 12px; color: rgba(255,255,255,0.6); margin-left: 4px; }
+
+/* Card body */
+.yd-related-card__body { padding: 24px; }
+.yd-related-card__row {
+  display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;
+}
+.yd-related-card__name {
+  font-family: var(--font-body); font-size: 1.125rem; font-weight: 700;
+  color: var(--text-light); margin: 0; line-height: 1.3;
+  transition: color var(--transition-fast);
+}
+.yd-related-card:hover .yd-related-card__name { color: var(--primary); }
+.yd-related-card__name a { color: inherit; text-decoration: none; }
+.yd-related-card__price {
+  font-size: 1.125rem; font-weight: 800; color: var(--text-light); white-space: nowrap;
+}
+.yd-related-card__price small { font-size: 12px; color: var(--text-muted); font-weight: 400; margin-left: 4px; }
+
+/* Meta row (guests + location) */
+.yd-related-card__meta {
+  display: flex; align-items: center; gap: 16px;
+  color: var(--text-muted); font-size: 14px; margin-bottom: 24px; flex-wrap: wrap;
+}
+.yd-related-card__meta-item { display: flex; align-items: center; gap: 4px; }
+.yd-related-card__meta-item .material-symbols-outlined { font-size: 18px; opacity: 0.7; }
+
+/* Two action buttons — matches Stitch fleet cards */
+.yd-related-card__actions { display: flex; gap: 8px; }
+.yd-related-card__btn-details {
+  flex: 1; background: rgba(255,255,255,0.1); color: var(--text-light);
+  padding: 12px 0; border-radius: 12px; font-weight: 700; font-size: 14px;
+  text-align: center; text-decoration: none; transition: background var(--transition-fast);
+}
+.yd-related-card__btn-details:hover { background: rgba(255,255,255,0.2); color: var(--text-light); }
+.yd-related-card__btn-book {
+  flex: 2; background: var(--primary); color: var(--secondary);
+  padding: 12px 0; border-radius: 12px; font-weight: 800; font-size: 12px;
+  text-align: center; text-decoration: none; text-transform: uppercase; letter-spacing: 0.1em;
+  transition: background var(--transition-fast);
+}
+.yd-related-card__btn-book:hover { background: var(--primary-hover); color: var(--secondary); }
+
+/* ── Yacht Detail Responsive ── */
+@media (max-width: 1200px) {
+  .yd-body__inner { grid-template-columns: 1fr 360px; gap: 48px; }
+  .yd-amenities-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 1024px) {
+  .yd-body__inner { grid-template-columns: 1fr; }
+  .yd-sidebar { position: static; }
+  .yd-hero__grid { min-height: 380px; max-height: 60vh; }
+  .yd-related__grid { grid-template-columns: repeat(2, 1fr); }
+  .yd-spec { min-width: 100px; }
+  .yd-reviews-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .yd-hero__grid { grid-template-columns: 1fr; max-height: none; min-height: 0; }
+  .yd-hero__main { max-height: 300px; }
+  .yd-hero__side { flex-direction: row; }
+  .yd-hero__thumb { height: 140px; }
+  .yd-intro__header { flex-direction: column; }
+  .yd-specs { flex-direction: column; gap: 8px; }
+  .yd-spec { min-width: 0; padding: 14px 20px; }
+  .yd-amenities-grid { grid-template-columns: repeat(2, 1fr); }
+  .yd-related__grid { grid-template-columns: 1fr; }
+  .yd-captain__card { flex-direction: column; align-items: center; text-align: center; }
+  .yd-captain__credentials { justify-content: center; }
+  .yd-body { padding: 40px 0 60px; }
+  .yd-content { gap: 40px; }
+  .yd-related { padding: 48px 0; }
+  .yd-related__header { margin-bottom: 32px; }
+  .yd-intro { padding: 28px 0 0; }
+  .yd-gallery-modal__nav { width: 40px; height: 40px; }
+  .yd-gallery-modal__prev { left: 10px; }
+  .yd-gallery-modal__next { right: 10px; }
+  .yd-gallery-modal__close { top: 12px; right: 12px; width: 38px; height: 38px; }
+}
+@media (max-width: 480px) {
+  .yd-hero__main { max-height: 240px; }
+  .yd-hero__thumb { height: 110px; }
+  .yd-intro__title { font-size: clamp(28px, 7vw, 40px); }
+  .yd-specs { gap: 6px; }
+  .yd-spec { padding: 12px 16px; gap: 10px; }
+  .yd-spec__val { font-size: 17px; }
+  .yd-spec__icon { font-size: 20px; }
+  .yd-amenities-grid { grid-template-columns: 1fr 1fr; gap: 6px 12px; }
+  .yd-amenity { font-size: 12px; }
+  .yd-amenity__icon { font-size: 18px; }
+  .yd-section__title { font-size: clamp(20px, 5vw, 28px); margin-bottom: 20px; }
+  .yd-review-card { padding: 20px; }
+  .yd-related-card__body { padding: 16px; }
+  .yd-related-card__btn-details, .yd-related-card__btn-book { padding: 10px 0; font-size: 12px; border-radius: 8px; }
+  .yacht-detail .bbc-booking-form-container .bbc-booking-widget { padding: 16px; }
+  .yd-sidebar-box { padding: 16px; }
+  .yd-whatsapp-btn { padding: 12px 16px; font-size: 14px; }
+}
+@media (max-width: 380px) {
+  .yd-amenity { font-size: 11px; padding: 4px 0; }
+  .yd-amenity__icon { font-size: 16px; }
+  .yd-related-card__name { font-size: 1rem; }
+  .yd-related-card__price { font-size: 1rem; }
+  .yd-related-card__meta { font-size: 12px; margin-bottom: 16px; }
+  .yd-related-card__row { flex-direction: column; gap: 4px; }
+}
+
+/* ============================================================
+   OC THEME ADDITIONS — appended
+   ============================================================ */
+
+/* ── Fleet Single — 6-column fixed spec grid ── */
+.yd-specs.yd-specs--fixed6 {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+.yd-specs.yd-specs--fixed6 .yd-spec {
+  flex: unset;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 16px;
+}
+.yd-spec--empty {
+  opacity: 0.25;
+  cursor: default;
+  pointer-events: none;
+}
+.yd-spec__empty-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+@media (max-width: 1024px) {
+  .yd-specs.yd-specs--fixed6 { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+  .yd-specs.yd-specs--fixed6 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .yd-specs.yd-specs--fixed6 { grid-template-columns: 1fr; }
+}
+
+/* ── Form row helpers ── */
+.oc-form-row--2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 480px) {
+  .oc-form-row--2col { grid-template-columns: 1fr; }
+}
+
+/* ── Fleet card excerpt clamp (2 lines) ── */
+.fl-vessel-card__excerpt {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  max-height: calc(1.65em * 2);
+}
+
+/* ── Homepage service card desc clamp (2 lines) ── */
+.oc-svc-card2__body > p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  max-height: calc(1.6em * 2);
+}
+
+/* ── Sidebar form field spacing ── */
+.oc-sidebar-form__field + .oc-sidebar-form__field { margin-top: 14px; }
+
+/* ── Grid-row form cells: cancel sibling margin and align tops ── */
+.oc-form-row--2col {
+  align-items: start;
+}
+.oc-form-row--2col .oc-sidebar-form__field + .oc-sidebar-form__field {
+  margin-top: 0;
+}
+.oc-form-grid {
+  align-items: start;
+}
+.oc-form-grid .oc-sidebar-form__field + .oc-sidebar-form__field {
+  margin-top: 0;
+}
+
+/* ── Tighten gap from 2-col row to the next sibling field (e.g. Message) ── */
+.oc-form-row--2col + .oc-sidebar-form__field {
+  margin-top: 10px;
+}
+
+/* ── Off-canvas menu settings-driven vars ── */
+.oc-mobile-nav {
+  width: var(--offcanvas-width, 300px);
+  background: var(--offcanvas-bg, #070d1a);
+}
+.oc-mobile-nav a {
+  font-size: var(--offcanvas-font-size, 18px);
+  color: var(--offcanvas-link, #f0ece3);
+}
+
+/* ── Header settings-driven vars ── */
+.oc-header__logo img,
+.site-header .custom-logo {
+  max-height: var(--logo-max-height, 56px);
+  width: auto;
+}
+
+/* ── Flatpickr dark theme overrides (theme-aware) ── */
+.flatpickr-calendar {
+  background: var(--surface, #111a28) !important;
+  border: 1px solid rgba(217,178,48,0.25) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5) !important;
+}
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange,
+.flatpickr-day.selected.inRange {
+  background: var(--primary, #d9b230) !important;
+  border-color: var(--primary, #d9b230) !important;
+  color: #0a0f1a !important;
+}
+.flatpickr-day.inRange {
+  background: rgba(217,178,48,0.15) !important;
+  border-color: rgba(217,178,48,0.1) !important;
+  color: var(--text, #f0ece3) !important;
+}
+.flatpickr-day {
+  color: var(--text, #f0ece3) !important;
+}
+.flatpickr-day:hover {
+  background: rgba(217,178,48,0.2) !important;
+}
+.flatpickr-day.flatpickr-disabled,
+.flatpickr-day.prevMonthDay,
+.flatpickr-day.nextMonthDay {
+  color: var(--text-muted, #94a3b8) !important;
+  opacity: 0.4 !important;
+}
+.flatpickr-months .flatpickr-month,
+.flatpickr-weekdays,
+.flatpickr-weekday {
+  background: var(--surface, #111a28) !important;
+  color: var(--text, #f0ece3) !important;
+}
+.flatpickr-current-month .flatpickr-monthDropdown-months,
+.flatpickr-current-month input.cur-year {
+  color: var(--text, #f0ece3) !important;
+}
+.flatpickr-prev-month svg,
+.flatpickr-next-month svg { fill: var(--primary, #d9b230) !important; }
+
+/* ── Google Places autocomplete dropdown ── */
+.pac-container {
+  background: var(--surface, #111a28);
+  border: 1px solid rgba(217,178,48,0.25);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  font-family: var(--font-body, 'Inter', sans-serif);
+  z-index: 9999;
+}
+.pac-item {
+  color: var(--text, #f0ece3);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.pac-item:hover, .pac-item-selected {
+  background: rgba(217,178,48,0.1);
+}
+.pac-item-query { color: var(--primary, #d9b230); }
+.pac-icon { display: none; }
+.pac-matched { font-weight: 600; }
+
+/* ── Hero inline controls ── */
+.oc-page-hero--controlled {
+  position: relative;
+  overflow: hidden;
+}
+.oc-page-hero--controlled .oc-page-hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.oc-page-hero--controlled .oc-page-hero__content {
+  position: relative;
+  z-index: 2;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MOBILE OFF-CANVAS BACKDROP
+   ══════════════════════════════════════════════════════════════ */
+body.menu-open::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+/* Off-canvas drawer — settings-driven CSS vars */
+.oc-mobile-nav {
+  width: var(--offcanvas-width, 300px);
+  background: var(--offcanvas-bg, #070d1a);
+  z-index: 1100;
+  transition: transform 0.3s ease;
+}
+.oc-mobile-nav__list a {
+  color: var(--offcanvas-link, #f0ece3);
+  font-size: var(--offcanvas-font-size, 16px);
+}
+.oc-mobile-nav__list a:hover {
+  color: var(--primary, #d9b230);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   GLOBAL MOBILE RESPONSIVENESS
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 768px — tablet ── */
+@media (max-width: 768px) {
+
+  /* Hero sections */
+  .oc-hero { min-height: 80vh; padding: 120px 0 60px; }
+  .oc-hero__content h1 { font-size: clamp(36px, 9vw, 56px); }
+  .oc-hero__content p { font-size: 15px; }
+
+  /* Homepage booking widget — vertical stack */
+  .oc-booking-widget__form {
+    flex-direction: column;
+    gap: 0;
+    border-radius: 16px;
+  }
+  .oc-bw-field { width: 100%; padding: 14px 16px; }
+  .oc-bw-divider { display: none; }
+  .oc-bw-select,
+  .oc-bw-input { width: 100%; }
+  .oc-bw-submit { width: 100%; border-radius: 0 0 16px 16px; padding: 16px; }
+
+  /* Section headers */
+  .oc-section-header h2 { font-size: clamp(28px, 7vw, 42px); }
+
+  /* Destination cards — 2 columns */
+  .oc-dest-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Services cards — 1 column */
+  .oc-svc-grid,
+  .oc-services-grid,
+  .oc-svc-grid2 { grid-template-columns: 1fr; }
+
+  /* Packages grid — 1 column */
+  .oc-pkg-grid { grid-template-columns: 1fr; }
+
+  /* Offer cards — 1 column */
+  .oc-offer-cards,
+  .oc-offers-grid { grid-template-columns: 1fr; }
+
+  /* Fleet grid → handled by archive-boat.php inline CSS */
+
+  /* Forms — all inputs full width */
+  .oc-form-row--2col {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  /* Sticky sidebars — un-stick on mobile */
+  .oc-sidebar,
+  .oc-sticky-sidebar { position: static; top: auto; }
+
+  /* Itinerary/service single — stack main + sidebar */
+  .oc-itin-layout,
+  .oc-svc-layout { flex-direction: column; }
+
+  /* Destination single — stack layout */
+  .oc-dest-single,
+  .oc-destination-layout { flex-direction: column; }
+
+  /* CTA strips */
+  .oc-cta-strip__inner { flex-direction: column; text-align: center; gap: 24px; }
+
+  /* Team / crew grid */
+  .oc-crew-grid,
+  .oc-team-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Fleet filter bar horizontal scroll on mobile */
+  .fl-filter-bar__inner { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; padding-bottom: 12px; }
+
+}
+
+/* ── 480px — large phone ── */
+@media (max-width: 480px) {
+
+  /* Hero */
+  .oc-hero { min-height: 90vh; }
+  .oc-hero__content h1 { font-size: clamp(28px, 10vw, 40px); }
+  .oc-hero__content .oc-hero__eyebrow { font-size: 11px; }
+
+  /* Listing page heroes */
+  .dt-hero, .pk-hero, .sv-hero, .it-hero {
+    min-height: 40vh !important;
+    padding: 100px 20px 40px;
+  }
+  .dt-hero h1, .pk-hero h1, .sv-hero h1, .it-hero h1 {
+    font-size: clamp(28px, 9vw, 42px);
+  }
+
+  /* Destination cards — 1 column */
+  .oc-dest-grid { grid-template-columns: 1fr; }
+
+  /* Fleet specs — 3 cols then 2 cols */
+  .yd-specs.yd-specs--fixed6 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Package filter tabs — horizontal scroll */
+  .oc-pkg-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap;
+    padding-bottom: 8px;
+  }
+  .oc-pkg-tabs [data-tab] { white-space: nowrap; }
+
+  /* Crew grid — 1 column */
+  .oc-crew-grid,
+  .oc-team-grid { grid-template-columns: 1fr; }
+
+  /* Vessel grid on homepage */
+  .oc-vessel-grid { grid-template-columns: 1fr; }
+
+  /* Fleet single specs — 3 cols */
+  .yd-specs { grid-template-columns: repeat(3, 1fr); }
+
+  /* Flatpickr — full width on mobile */
+  .flatpickr-calendar { width: 100% !important; max-width: 320px; }
+
+  /* Booking widget button */
+  .oc-bw-submit { font-size: 15px; }
+
+  /* Inquiry forms — all rows single col */
+  .oc-form-row,
+  .oc-form-row--2col { grid-template-columns: 1fr; }
+
+  /* Typography scale-down */
+  .oc-section-header h2 { font-size: clamp(24px, 8vw, 34px); }
+  .oc-section-header p { font-size: 14px; }
+
+}
+
+/* ── 380px — small phone ── */
+@media (max-width: 380px) {
+
+  /* Fleet specs — 2 cols */
+  .yd-specs.yd-specs--fixed6,
+  .yd-specs { grid-template-columns: repeat(2, 1fr); }
+
+  /* Off-canvas — full width on very small screens */
+  .oc-mobile-nav { width: 100%; }
+
+}
+
+/* ── Header logo responsive ── */
+.oc-logo__img { max-height: var(--logo-max-height, 56px); width: auto; }
+
+/* ── Header height via settings ── */
+.oc-header__inner { min-height: var(--header-height, 80px); }
+
+/* ── Nav link styles via settings ── */
+.oc-nav__list a {
+  font-size: var(--nav-font-size, 14px);
+  color: var(--nav-link-color, inherit);
+}
+
+/* ── Mobile header background via settings ── */
+@media (max-width: 768px) {
+  .oc-header { background: var(--mobile-header-bg, var(--header-bg, rgba(7,13,26,0.95))); }
+}
+
+/* ============================================================
+   ── Mobile responsive overrides ──
+   Consolidated refinements filling gaps in the breakpoint ladder.
+   Placed last so these win cascade ties.
+   ============================================================ */
+
+/* ── 1024px — laptop / large tablet ── */
+@media (max-width: 1024px) {
+  /* Services 4-col → 3-col here (not a sudden 4→2 jump at 1200px) */
+  .fp-services__grid { grid-template-columns: repeat(3, 1fr); }
+  /* Packages 3-col → 2-col intermediate (was 3→1 at 1024px) */
+  .fp-packages__grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── 960px — tablet ── */
+@media (max-width: 960px) {
+  /* Footer 4-col → 2-col a touch earlier for tablets */
+  .oc-footer__grid { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+  /* Services → 2-col */
+  .fp-services__grid { grid-template-columns: repeat(2, 1fr); }
+  /* Yacht-detail: ensure sidebar stacks under main on tablet */
+  .yd-body__inner   { grid-template-columns: 1fr; gap: 40px; }
+}
+
+/* ── 640px — large phone ── */
+@media (max-width: 640px) {
+  /* Heading down-scale so h1 isn't absurd on phones */
+  h1 { font-size: clamp(2rem, 7vw, 2.8rem); }
+  h2 { font-size: clamp(1.6rem, 5vw, 2.2rem); }
+  /* Services / packages / footer single column */
+  .fp-services__grid,
+  .fp-packages__grid { grid-template-columns: 1fr; }
+  /* Hero min-heights shrink */
+  .pk-hero, .dt-hero, .sv-hero, .it-hero,
+  .oc-pkg-hero, .oc-dest-hero, .oc-svc-hero, .oc-bpkg-hero {
+    min-height: 50vh;
+  }
+  /* Search forms: stack fields vertically on phones */
+  .bbc-search-form-v2,
+  .oc-sf { flex-direction: column; }
+  .bbc-search-divider-v2 { display: none; }
+}
+
+/* ── 768px — tablet ── */
+@media (max-width: 768px) {
+  /* ── Page: Contact ── */
+  .ct-main { padding: 60px 0 80px; }
+  .ct-whatsapp { flex-direction: column; text-align: center; }
+
+  /* ── Page: Services ── */
+  .sv-detail { padding: 80px 0; }
+  .sv-detail__img { height: 340px; }
+  .sv-cta { padding: 80px 0; }
+  .sv-detail__inner { gap: 40px; }
+
+  /* ── Page: Destinations ── */
+  .dt-itin-days { padding: 24px; }
+  .dt-chart__inner { gap: 40px; }
+
+  /* ── Page: Itinerary ── */
+  .it-body__inner { grid-template-columns: 1fr; }
+  .it-sidebar { position: static; order: -1; }
+
+  /* ── Yacht detail — captain & reviews ── */
+  .yd-review-card__author { flex-wrap: wrap; }
+
+  /* ── Hero padding — listing pages only (single CPT heroes handled separately) ── */
+  .ct-hero { padding: 80px 0 40px; }
+
+  /* ── Front-page ── */
+  .fp-testimonial { padding: 32px; }
+  .fp-vessel-card__body { padding: 20px; }
+  .fp-dest-grid { margin-top: 40px; }
+  .fp-services .fp-section-header { margin-bottom: 40px; }
+}
+
+/* ── 640px — large phone ── */
+@media (max-width: 640px) {
+  /* Hero titles */
+  .pk-hero__title, .dt-hero h1, .sv-hero h1,
+  .it-hero h1, .ct-hero__title { font-size: clamp(28px, 9vw, 42px); }
+
+  /* Destinations regions fallback */
+  .dt-regions__grid { grid-template-columns: 1fr; }
+
+  /* ── Yacht detail ── */
+  .yd-related__grid { grid-template-columns: 1fr; gap: 16px; }
+  .yd-related-card__actions { flex-wrap: wrap; }
+  .yd-captain__card { padding: 24px; }
+
+  /* ── Single pages: Offer hero ── */
+  .oc-offer-hero, .oc-itin-hero { min-height: 40vh; }
+
+  /* ── Fleet card titles ── */
+  .fl-card__name { white-space: normal; }
+
+  /* ── Package card font scaling ── */
+  .fp-package-card__name { font-size: clamp(20px, 4vw, 26px); }
+
+  /* ── Itinerary day photos ── */
+  .it-day__photos { grid-template-columns: 1fr; }
+}
+
+/* ── 480px — small phone ── */
+@media (max-width: 480px) {
+  .oc-footer__grid { grid-template-columns: 1fr; gap: 2rem; }
+  h1 { font-size: clamp(1.75rem, 8vw, 2.2rem); }
+  h2 { font-size: clamp(1.4rem, 6vw, 1.8rem); }
+  /* Container padding tighter on tiny screens */
+  .oc-container, .container { padding: 0 1rem; }
+
+  /* ── Section padding reduction ── */
+  .sv-detail { padding: 60px 0; }
+  .sv-cta { padding: 60px 0; }
+  .ct-main { padding: 40px 0 60px; }
+  .ct-hero { padding: 60px 0 30px; }
+  .pk-bespoke { padding: 60px 0; }
+  .pk-testimonials { padding: 60px 0; }
+  .dt-chart { padding: 60px 0; }
+  .dt-itin-preview-section { padding: 60px 0; }
+
+  /* ── Yacht detail ── */
+  .yd-hero__grid { min-height: auto; }
+  .yd-amenities-grid { grid-template-columns: 1fr; }
+  .yd-body { padding: 40px 0 60px; }
+  .yd-body__inner { gap: 24px; }
+  .yd-related { padding: 40px 0; }
+  .yd-captain__name { font-size: 18px; }
+  .yd-captain__card { padding: 20px; }
+  .yd-spec { min-width: auto; flex: 1 1 calc(50% - 6px); }
+
+  /* ── Front-page ── */
+  .fp-vessel-card__price-val { font-size: 22px; }
+  .fp-vessel-card__body { padding: 16px; }
+  .fp-testimonial { padding: 24px; }
+  .fp-testimonial::before { font-size: 80px; }
+  .fp-dest-grid { margin-top: 32px; }
+  .fp-services .fp-section-header { margin-bottom: 32px; }
+  .fp-cta__contact-info { padding: 24px; }
+  .fp-package-card__header { padding: 20px 20px 16px; }
+
+  /* ── Contact ── */
+  .ct-form-wrap { padding: 24px 16px; }
+  .ct-main__inner { gap: 40px; }
+
+  /* ── Services ── */
+  .sv-detail__img { height: 240px; }
+
+  /* ── Packages ── */
+  .pk-bespoke__inner { gap: 32px; }
+  .pk-testimonials__grid { gap: 20px; }
+
+  /* ── Destinations ── */
+  .dt-itin-days { padding: 20px; }
+  .dt-chart__inner { gap: 24px; }
+
+  /* ── White-space overflow prevention ── */
+  .btn-primary { white-space: normal; }
+  .bbc-boat-listing-widget .bbc-price-amount { white-space: normal; word-break: break-word; }
+  .yd-related-card__price { white-space: normal; }
+  .oc-field-error { white-space: normal; }
+
+  /* ── Single CPT hero sections ── */
+  .oc-pkg-hero, .oc-dest-hero, .oc-svc-hero, .oc-bpkg-hero,
+  .oc-offer-hero, .oc-itin-hero { min-height: 35vh; padding: 80px 0 40px; }
+
+  /* ── Itinerary body ── */
+  .it-body__inner { gap: 24px; }
+  .it-sidebar { padding: 20px; }
+
+  /* ── Single offer ── */
+  .oc-offer-body { gap: 24px; }
+  .oc-offer-sidebar { padding: 20px; }
+
+  /* ── Boat cards ── */
+  .boat-card-specs { grid-template-columns: 1fr; }
+  .boat-card-header { flex-direction: column; }
+
+  /* ── Related/inclusions grids ── */
+  .oc-inclusions-grid { grid-template-columns: 1fr; }
+  .oc-form-grid { grid-template-columns: 1fr; }
+}
+
+/* ── 380px — extra small phone ── */
+@media (max-width: 380px) {
+  /* Tighten everything for narrow devices */
+  h1 { font-size: clamp(1.5rem, 9vw, 1.8rem); }
+  h2 { font-size: clamp(1.25rem, 7vw, 1.5rem); }
+  .oc-container, .container { padding: 0 0.75rem; }
+
+  .ct-hero { padding: 50px 0 24px; }
+  .oc-pkg-hero, .oc-dest-hero, .oc-svc-hero, .oc-bpkg-hero,
+  .oc-offer-hero, .oc-itin-hero { min-height: 30vh; padding: 60px 0 30px; }
+
+  /* Yacht detail specs → single column */
+  .yd-spec { flex: 1 1 100%; }
+
+  /* Form padding */
+  .ct-form-wrap { padding: 20px 12px; }
+
+  /* Cards / sidebars */
+  .oc-pkg-sidebar, .oc-dest-sidebar, .oc-svc-sidebar,
+  .oc-bpkg-sidebar, .oc-offer-sidebar { padding: 16px; }
+}
+
+/* ============================================================
+   ── Typography settings propagation ──
+   Apply body-font-weight / size / colour to generic text nodes
+   so Theme Settings → Typography changes are visible. Elements
+   with design-critical weights (buttons, captions, nav links,
+   stat numbers, card titles) keep their explicit weights.
+   ============================================================ */
+body p,
+body li,
+body dd,
+body dt,
+body blockquote,
+body label,
+body input,
+body textarea,
+body select {
+  font-weight: var(--body-font-weight, 400);
+  font-size:   var(--body-font-size, 16px);
+  color:       var(--body-font-color, var(--text));
+}
+
+/* Paragraphs inherit body line-height + letter-spacing */
+body p,
+body li,
+body blockquote {
+  line-height:    var(--body-line-height, 1.7);
+  letter-spacing: var(--body-letter-spacing, 0);
+}
+
+/* ============================================================
+   ── Header Variants (desktop only, ≥ 769px) ──
+   The mobile header (hamburger + drawer) is unchanged by these
+   rules because .oc-header__pill is hidden under 769px.
+   ============================================================ */
+@media (min-width: 769px) {
+
+  /* Variant: bar — solid edge-to-edge glass bar, no pill */
+  .oc-header[data-header-variant="bar"] {
+    padding: 0;
+    background: var(--header-bg, rgba(10,15,26,0.85));
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--glass-border, rgba(217,178,48,0.1));
+  }
+  .oc-header[data-header-variant="bar"] .oc-header__pill {
+    background: transparent;
+    border: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-radius: 0;
+    max-width: var(--container, 1280px);
+    padding: 0.75rem clamp(1rem, 3vw, 2rem);
+  }
+
+  /* Variant: centered — stacked logo on top, nav + CTA row below */
+  .oc-header[data-header-variant="centered"] .oc-header__pill {
+    flex-direction: column;
+    border-radius: 20px;
+    padding: 1rem 2rem;
+    gap: 0.75rem;
+    max-width: 80rem;
+  }
+  .oc-header[data-header-variant="centered"] .oc-logo {
+    margin: 0 auto;
+  }
+  .oc-header[data-header-variant="centered"] .oc-nav {
+    order: 2;
+  }
+  .oc-header[data-header-variant="centered"] .oc-header__cta {
+    order: 3;
+  }
+
+  /* Variant: minimal — no pill, simple underline row */
+  .oc-header[data-header-variant="minimal"] {
+    padding: 0.75rem clamp(1rem, 3vw, 2rem);
+    border-bottom: 1px solid var(--glass-border, rgba(217,178,48,0.1));
+    background: var(--header-bg, rgba(10,15,26,0.85));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .oc-header[data-header-variant="minimal"] .oc-header__pill {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 0.25rem 0;
+    max-width: var(--container, 1280px);
+  }
+
+  /* Variant: transparent — floating, no background, no border */
+  .oc-header[data-header-variant="transparent"] .oc-header__pill {
+    background: transparent;
+    border: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  /* Variant: split — logo far-left, nav right, CTA follows (no centre pill compression) */
+  .oc-header[data-header-variant="split"] .oc-header__pill {
+    border-radius: 12px;
+    max-width: var(--container, 1280px);
+  }
+  .oc-header[data-header-variant="split"] .oc-nav {
+    flex: 0 1 auto;
+    justify-content: flex-end;
+    margin-left: auto;
+  }
+}
+
