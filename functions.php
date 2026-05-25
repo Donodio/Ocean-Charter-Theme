@@ -74,8 +74,8 @@ require_once OC_THEME_DIR . '/inc/inquiry-handler.php';
 // CRM outbound webhook dispatcher
 require_once OC_THEME_DIR . '/inc/crm-webhook.php';
 
-// One Click Demo Import support
-require_once OC_THEME_DIR . '/inc/ocdi-support.php';
+// Self-contained demo content importer (Appearance → Import Demo)
+require_once OC_THEME_DIR . '/inc/demo-importer.php';
 
 // BBC plugin page generator (admin tool)
 require_once OC_THEME_DIR . '/inc/bbc-page-generator.php';

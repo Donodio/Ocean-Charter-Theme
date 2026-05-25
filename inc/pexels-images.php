@@ -77,7 +77,7 @@ define( 'OC_IMG_VESSEL_4', 'https://images.pexels.com/photos/1001699/pexels-phot
 define( 'OC_IMG_VESSEL_5', 'https://images.pexels.com/photos/1591375/pexels-photo-1591375.jpeg?auto=compress&cs=tinysrgb&w=1920' );
 
 /** Vessel 6: classic yacht at anchor in turquoise cove */
-define( 'OC_IMG_VESSEL_6', 'https://images.pexels.com/photos/2278586/pexels-photo-2278586.jpeg?auto=compress&cs=tinysrgb&w=1920' );
+define( 'OC_IMG_VESSEL_6', 'https://images.pexels.com/photos/144634/pexels-photo-144634.jpeg?auto=compress&cs=tinysrgb&w=1920' );
 
 // ── Itinerary location shots ──────────────────────────────────────────────────
 
