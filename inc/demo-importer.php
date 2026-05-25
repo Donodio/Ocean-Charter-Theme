@@ -124,6 +124,22 @@ function oc_demo_find_post_by_title( string $title, string $post_type ): int {
 }
 
 /**
+ * Remove all Elementor meta from a post so the theme's PHP template renders
+ * instead of an old saved Elementor layout. Idempotent.
+ */
+function oc_demo_strip_elementor( int $post_id ): void {
+    global $wpdb;
+    $keys = $wpdb->get_col( $wpdb->prepare(
+        "SELECT meta_key FROM {$wpdb->postmeta} WHERE post_id = %d AND meta_key LIKE %s",
+        $post_id,
+        $wpdb->esc_like( '_elementor' ) . '%'
+    ) );
+    foreach ( $keys as $key ) {
+        delete_post_meta( $post_id, $key );
+    }
+}
+
+/**
  * Sideload an image URL into the media library and return its attachment ID.
  * Returns 0 on failure (templates fall back to the OC_IMG_* constant).
  */
@@ -252,7 +268,7 @@ function oc_run_demo_import(): array {
     /* 2. PAGES + hero images. */
     $demo_pages = array(
         array( 'title' => 'Home',         'slug' => 'home',         'template' => '',                     'hero' => 'OC_IMG_HERO_HOME' ),
-        array( 'title' => 'Our Fleet',    'slug' => 'fleet',        'template' => '',                     'hero' => 'OC_IMG_HERO_FLEET' ),
+        array( 'title' => 'Our Fleet',    'slug' => 'fleet',        'template' => 'page-fleet.php',       'hero' => 'OC_IMG_HERO_FLEET' ),
         array( 'title' => 'Services',     'slug' => 'services',     'template' => 'page-services.php',     'hero' => 'OC_IMG_HERO_SERVICES' ),
         array( 'title' => 'Destinations', 'slug' => 'destinations', 'template' => 'page-destinations.php', 'hero' => 'OC_IMG_HERO_DESTINATIONS' ),
         array( 'title' => 'Packages',     'slug' => 'packages',     'template' => 'page-packages.php',     'hero' => 'OC_IMG_HERO_PACKAGES' ),
@@ -268,7 +284,11 @@ function oc_run_demo_import(): array {
             if ( ! empty( $page['template'] ) ) {
                 update_post_meta( $existing->ID, '_wp_page_template', $page['template'] );
             }
-            $results[] = "Page already exists: {$page['title']}";
+            // Self-heal: a page left in Elementor "builder" mode renders its old
+            // saved layout via the_content() and bypasses the theme's PHP template.
+            // Strip it so the redesigned template always wins.
+            oc_demo_strip_elementor( $existing->ID );
+            $results[] = "Page refreshed: {$page['title']}";
             continue;
         }
 
@@ -297,6 +317,7 @@ function oc_run_demo_import(): array {
             set_post_thumbnail( $post_id, $hero_id );
         }
 
+        oc_demo_strip_elementor( $post_id );
         $page_ids[ $page['slug'] ] = $post_id;
         $results[] = "Created page: {$page['title']}";
     }
