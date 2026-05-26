@@ -3,7 +3,9 @@
  * Ocean Charter — Extra Demo Content Seeder
  * Adds additional itineraries, offers, and vessels to reach 4-column grid counts.
  * Run via: wp eval-file inc/cpt/demo-content-extra.php
- * Or include from a setup script after demo-content.php has been run.
+ * Or include from inc/demo-importer.php after demo-content.php has run.
+ *
+ * @package OceanCharter
  */
 if ( ! defined( 'ABSPATH' ) ) {
     $wp_load = dirname( __DIR__, 5 ) . '/wp-load.php';
@@ -11,10 +13,15 @@ if ( ! defined( 'ABSPATH' ) ) {
     else { echo "wp-load.php not found.\n"; exit(1); }
 }
 
-// Prevent double-seeding
+if ( ! ( defined( 'WP_CLI' ) && WP_CLI ) && ! current_user_can( 'manage_options' ) ) {
+    wp_die( 'Admin access required.' );
+}
+
+// Prevent double-seeding. The demo importer deletes this option before
+// including the file so re-imports work; direct CLI runs respect it.
 if ( get_option( 'oc_demo_extra_seeded' ) === '1' ) {
     echo "Extra demo content already seeded. Delete option 'oc_demo_extra_seeded' to re-run.\n";
-    exit;
+    return;
 }
 
 // ---------------------------------------------------------------------------

@@ -5,13 +5,20 @@
  * Downloads high-quality Pexels photos and assigns them as featured images
  * (and gallery meta) to all seeded Ocean Charter CPT posts.
  *
- * Run via: php -d mysqli.default_socket=... inc/cpt/seed-images.php
+ * Run via: wp eval-file inc/cpt/seed-images.php
+ * Or include from inc/demo-importer.php (preferred).
  * Safe to re-run — skips posts that already have a thumbnail.
+ *
+ * @package OceanCharter
  */
 if ( ! defined( 'ABSPATH' ) ) {
     $wp_load = dirname( __DIR__, 5 ) . '/wp-load.php';
     if ( file_exists( $wp_load ) ) require $wp_load;
     else { echo "wp-load.php not found.\n"; exit( 1 ); }
+}
+
+if ( ! ( defined( 'WP_CLI' ) && WP_CLI ) && ! current_user_can( 'manage_options' ) ) {
+    wp_die( 'Admin access required.' );
 }
 
 // Required for media_sideload_image()
