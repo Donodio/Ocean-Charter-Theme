@@ -276,50 +276,77 @@ function oc_run_demo_import(): array {
         array( 'title' => 'Contact',      'slug' => 'contact',      'template' => 'page-contact.php',      'hero' => 'OC_IMG_HERO_CONTACT' ),
     );
 
+    $managed_marker = '<!-- Managed by the Ocean Charter template -->';
+
     $page_ids = array();
     foreach ( $demo_pages as $page ) {
         $existing = get_page_by_path( $page['slug'] );
+
         if ( $existing ) {
-            $page_ids[ $page['slug'] ] = $existing->ID;
-            if ( ! empty( $page['template'] ) ) {
-                update_post_meta( $existing->ID, '_wp_page_template', $page['template'] );
+            $post_id   = (int) $existing->ID;
+            $is_new    = false;
+            $notes     = array();
+        } else {
+            $post_id = wp_insert_post( array(
+                'post_title'   => $page['title'],
+                'post_name'    => $page['slug'],
+                'post_content' => $managed_marker,
+                'post_status'  => 'publish',
+                'post_type'    => 'page',
+            ) );
+
+            if ( is_wp_error( $post_id ) ) {
+                $results[] = "Error creating page {$page['title']}: " . $post_id->get_error_message();
+                continue;
             }
-            // Self-heal: a page left in Elementor "builder" mode renders its old
-            // saved layout via the_content() and bypasses the theme's PHP template.
-            // Strip it so the redesigned template always wins.
-            oc_demo_strip_elementor( $existing->ID );
-            $results[] = "Page refreshed: {$page['title']}";
-            continue;
+            $is_new = true;
+            $notes  = array();
         }
 
-        $post_id = wp_insert_post( array(
-            'post_title'   => $page['title'],
-            'post_name'    => $page['slug'],
-            'post_content' => '<!-- Managed by the Ocean Charter template -->',
-            'post_status'  => 'publish',
-            'post_type'    => 'page',
-        ) );
-
-        if ( is_wp_error( $post_id ) ) {
-            $results[] = "Error creating page {$page['title']}: " . $post_id->get_error_message();
-            continue;
-        }
-
+        // Template assignment (skip if the demo entry has no template, e.g. Home).
         if ( ! empty( $page['template'] ) ) {
             update_post_meta( $post_id, '_wp_page_template', $page['template'] );
         }
 
-        // Hero image (best-effort).
-        $hero_url = defined( $page['hero'] ) ? constant( $page['hero'] ) : '';
-        $hero_id  = oc_demo_sideload_image( $hero_url, $post_id, $page['title'] . ' hero' );
-        if ( $hero_id ) {
-            update_post_meta( $post_id, '_oc_hero_image', $hero_id );
-            set_post_thumbnail( $post_id, $hero_id );
+        // Strip stale Elementor meta so the redesigned PHP template wins. A page
+        // left in Elementor "builder" mode renders its old saved layout via
+        // the_content() and bypasses the theme template entirely.
+        oc_demo_strip_elementor( $post_id );
+
+        // Reset post_content if it still carries stale OCDI HTML — old imports
+        // shipped pages with huge inline <style> blocks that aren't rendered by
+        // the new templates but confuse anyone editing the page in WP admin.
+        if ( ! $is_new ) {
+            $current_content = (string) get_post_field( 'post_content', $post_id );
+            if ( strpos( $current_content, $managed_marker ) === false ) {
+                wp_update_post( array(
+                    'ID'           => $post_id,
+                    'post_content' => $managed_marker,
+                ) );
+                $notes[] = 'content reset';
+            }
         }
 
-        oc_demo_strip_elementor( $post_id );
+        // Hero image — sideload if missing. Without this, an existing page
+        // re-imported after a prior cleanup ends up with no hero, and the
+        // template renders an empty hero block. Best-effort: silently skips
+        // on download failure and the template's CDN fallback takes over.
+        $current_hero = absint( get_post_meta( $post_id, '_oc_hero_image', true ) );
+        if ( ! $current_hero ) {
+            $hero_url = ! empty( $page['hero'] ) && defined( $page['hero'] ) ? constant( $page['hero'] ) : '';
+            $hero_id  = oc_demo_sideload_image( $hero_url, $post_id, $page['title'] . ' hero' );
+            if ( $hero_id ) {
+                update_post_meta( $post_id, '_oc_hero_image', $hero_id );
+                set_post_thumbnail( $post_id, $hero_id );
+                $notes[] = 'hero restored';
+            }
+        }
+
         $page_ids[ $page['slug'] ] = $post_id;
-        $results[] = "Created page: {$page['title']}";
+
+        $label = $is_new ? 'Created page' : 'Page refreshed';
+        $tail  = $notes ? ' (' . implode( ', ', $notes ) . ')' : '';
+        $results[] = "{$label}: {$page['title']}{$tail}";
     }
 
     /* 3. FRONT PAGE. front-page.php renders the home template automatically. */
@@ -433,6 +460,15 @@ function oc_run_demo_import(): array {
     /* 7. Flush permalinks for the CPT archives. */
     flush_rewrite_rules();
     $results[] = 'Rewrite rules flushed.';
+
+    /* 8. Flush Boat Booking Core caches. The plugin caches lowest-price and
+       blocked-dates per boat via transients (24h / 1h). After a demo re-import
+       changes a boat's pricing meta the front-end would otherwise keep serving
+       the stale cached value until the transient expires. */
+    if ( function_exists( 'bbc_flush_all_caches' ) ) {
+        $deleted = bbc_flush_all_caches();
+        $results[] = sprintf( 'BBC caches flushed (%d transient rows).', $deleted );
+    }
 
     return $results;
 }
