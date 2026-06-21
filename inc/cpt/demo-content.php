@@ -3,7 +3,9 @@
  * Ocean Charter — Demo Content Seeder
  * Seeds all OC CPTs with realistic demo data.
  * Run via: wp eval-file inc/cpt/demo-content.php
- * Or include from a setup script.
+ * Or include from inc/demo-importer.php (preferred — that's the user-facing entry point).
+ *
+ * @package OceanCharter
  */
 if ( ! defined( 'ABSPATH' ) ) {
     $wp_load = dirname( __DIR__, 5 ) . '/wp-load.php';
@@ -11,10 +13,17 @@ if ( ! defined( 'ABSPATH' ) ) {
     else { echo "wp-load.php not found.\n"; exit(1); }
 }
 
-// Prevent double-seeding
+// Auth gate. Required for direct browser access; harmless when included from
+// the demo importer (admin context always satisfies one of these).
+if ( ! ( defined( 'WP_CLI' ) && WP_CLI ) && ! current_user_can( 'manage_options' ) ) {
+    wp_die( 'Admin access required.' );
+}
+
+// Prevent double-seeding. The demo importer deletes this option before
+// including the file so re-imports work; direct CLI runs respect it.
 if ( get_option( 'oc_demo_seeded' ) === '1' ) {
     echo "Demo content already seeded. Delete option 'oc_demo_seeded' to re-run.\n";
-    exit;
+    return;
 }
 
 // ---------------------------------------------------------------------------

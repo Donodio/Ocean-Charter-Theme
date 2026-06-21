@@ -187,79 +187,244 @@ function oc_run_demo_import(): array {
 
     $amenities = 'Jacuzzi on Sundeck, Fully-Equipped Gym, Salon & Dining Area, Retractable Sun Roof, High-Speed WiFi, Dolby Atmos Sound System, Jet Ski & Water Toys, Beach Club Platform, Air Conditioning Throughout, Professional Chef Available';
 
+    // Boat data uses the meta keys the current templates read:
+    //   page-fleet.php / archive-boat.php / single-boat.php look up
+    //   _bbc_boat_type, _bbc_condition, _bbc_price_hour|day|week,
+    //   _bbc_year_built, _bbc_bathrooms, _bbc_berths,
+    //   _bbc_captain_included, _bbc_fuel_included.
+    // The older _bbc_year and _bbc_price_half_day keys are kept alongside
+    // because single-boat.php still falls back to them for related boats
+    // and for pages built before the template rename.
     $demo_yachts = array(
         array(
             'title'   => 'The Azure Muse',
             'content' => "The Azure Muse represents the pinnacle of performance and luxury. Designed for those who demand both speed and sophistication, this vessel offers an expansive open-air experience with a retractable carbon fiber roof that invites the Mediterranean sun into the heart of the vessel.\n\nEvery inch of the interior has been crafted by award-winning designers, combining hand-stitched Italian leather with exotic woods and polished stainless steel accents.",
             'excerpt' => 'A Predator 74 at its finest. Designed for those who demand both speed and sophistication.',
-            'meta'    => array( '_bbc_length' => '74', '_bbc_max_guests' => '10', '_bbc_guests' => '10', '_bbc_cabins' => '4', '_bbc_location' => 'Palma, Mallorca', '_bbc_price_half_day' => '7900', '_bbc_year' => '2020', '_bbc_builder' => 'Sunseeker', '_bbc_max_speed' => '28', '_bbc_crew' => '4', '_bbc_beam' => '5.4', '_boat_captain_name' => 'Capt. Marcus Sterling', '_boat_captain_bio' => 'With over 15 years navigating the French Riviera and Amalfi Coast, Marcus ensures your journey is as safe as it is spectacular.' ),
+            'meta'    => array(
+                '_bbc_length'              => '74',
+                '_bbc_max_guests'          => '10',
+                '_bbc_guests'              => '10',
+                '_bbc_cabins'              => '4',
+                '_bbc_bathrooms'           => '4',
+                '_bbc_berths'              => '8',
+                '_bbc_location'            => 'Palma, Mallorca',
+                '_bbc_boat_type'           => 'motor yacht',
+                '_bbc_condition'           => 'like-new',
+                '_bbc_price_hour'          => '1450',
+                '_bbc_price_half_day'      => '7900',
+                '_bbc_price_day'           => '14800',
+                '_bbc_price_week'          => '89000',
+                '_bbc_year'                => '2020',
+                '_bbc_year_built'          => '2020',
+                '_bbc_builder'             => 'Sunseeker',
+                '_bbc_max_speed'           => '28',
+                '_bbc_crew'                => '4',
+                '_bbc_beam'                => '5.4',
+                '_bbc_captain_included'    => 'yes',
+                '_bbc_fuel_included'       => 'no',
+                '_boat_captain_name'       => 'Capt. Marcus Sterling',
+                '_boat_captain_bio'        => 'With over 15 years navigating the French Riviera and Amalfi Coast, Marcus ensures your journey is as safe as it is spectacular.',
+            ),
         ),
         array(
             'title'   => 'The Azure Sovereign',
             'content' => "A masterpiece of naval architecture combining raw performance with palatial comfort. The Azure Sovereign dominates every anchorage and marina she enters — a true superyacht presence in a motor yacht format.\n\nThe main saloon features 3-metre floor-to-ceiling panoramic windows, a dedicated cinema room, and an on-deck Jacuzzi overlooking the sea. Accommodation for 12 guests across 5 staterooms.",
             'excerpt' => 'Superyacht presence in a motor yacht format. 92ft of raw performance and palatial comfort.',
-            'meta'    => array( '_bbc_length' => '92', '_bbc_max_guests' => '12', '_bbc_guests' => '12', '_bbc_cabins' => '5', '_bbc_location' => 'Monaco, France', '_bbc_price_half_day' => '12500', '_bbc_year' => '2023', '_bbc_builder' => 'Sunseeker', '_bbc_max_speed' => '26', '_bbc_crew' => '6', '_bbc_beam' => '6.2' ),
+            'meta'    => array(
+                '_bbc_length'              => '92',
+                '_bbc_max_guests'          => '12',
+                '_bbc_guests'              => '12',
+                '_bbc_cabins'              => '5',
+                '_bbc_bathrooms'           => '5',
+                '_bbc_berths'              => '10',
+                '_bbc_location'            => 'Monaco, France',
+                '_bbc_boat_type'           => 'superyacht',
+                '_bbc_condition'           => 'new',
+                '_bbc_price_hour'          => '2300',
+                '_bbc_price_half_day'      => '12500',
+                '_bbc_price_day'           => '23500',
+                '_bbc_price_week'          => '141000',
+                '_bbc_year'                => '2023',
+                '_bbc_year_built'          => '2023',
+                '_bbc_builder'             => 'Sunseeker',
+                '_bbc_max_speed'           => '26',
+                '_bbc_crew'                => '6',
+                '_bbc_beam'                => '6.2',
+                '_bbc_captain_included'    => 'yes',
+                '_bbc_fuel_included'       => 'yes',
+            ),
         ),
         array(
             'title'   => 'Midnight Serenity',
             'content' => "With her distinctive obsidian hull and interior curated by a Renzo Piano Studio alumnus, Midnight Serenity is the most photographed vessel in the Côte d'Azur.\n\nThe expansive beach club at stern level converts in minutes to a fully equipped spa and wellness terrace.",
             'excerpt' => 'Distinctive obsidian hull, expansive beach club, and an interior by Renzo Piano Studio alumnus.',
-            'meta'    => array( '_bbc_length' => '78', '_bbc_max_guests' => '10', '_bbc_guests' => '10', '_bbc_cabins' => '4', '_bbc_location' => 'Cannes, France', '_bbc_price_half_day' => '9800', '_bbc_year' => '2022', '_bbc_builder' => 'Ferretti', '_bbc_max_speed' => '24', '_bbc_crew' => '5', '_bbc_beam' => '5.8' ),
+            'meta'    => array(
+                '_bbc_length'              => '78',
+                '_bbc_max_guests'          => '10',
+                '_bbc_guests'              => '10',
+                '_bbc_cabins'              => '4',
+                '_bbc_bathrooms'           => '4',
+                '_bbc_berths'              => '8',
+                '_bbc_location'            => 'Cannes, France',
+                '_bbc_boat_type'           => 'motor yacht',
+                '_bbc_condition'           => 'like-new',
+                '_bbc_price_hour'          => '1800',
+                '_bbc_price_half_day'      => '9800',
+                '_bbc_price_day'           => '18500',
+                '_bbc_price_week'          => '110000',
+                '_bbc_year'                => '2022',
+                '_bbc_year_built'          => '2022',
+                '_bbc_builder'             => 'Ferretti',
+                '_bbc_max_speed'           => '24',
+                '_bbc_crew'                => '5',
+                '_bbc_beam'                => '5.8',
+                '_bbc_captain_included'    => 'yes',
+                '_bbc_fuel_included'       => 'no',
+            ),
         ),
         array(
             'title'   => 'Golden Horizon',
             'content' => "Warm teak decks, rich mahogany interiors, and a sun-kissed Mediterranean soul define the Golden Horizon experience. Perfect for intimate groups who appreciate warmth over ostentation.\n\nThe generous cockpit and fly bridge provide multiple social settings for entertaining.",
             'excerpt' => 'Warm teak decks and Mediterranean soul. Perfect for intimate groups of up to 8 guests.',
-            'meta'    => array( '_bbc_length' => '68', '_bbc_max_guests' => '8', '_bbc_guests' => '8', '_bbc_cabins' => '3', '_bbc_location' => 'Ibiza, Spain', '_bbc_price_half_day' => '6200', '_bbc_year' => '2021', '_bbc_builder' => 'Princess Yachts', '_bbc_max_speed' => '22', '_bbc_crew' => '3', '_bbc_beam' => '5.0' ),
+            'meta'    => array(
+                '_bbc_length'              => '68',
+                '_bbc_max_guests'          => '8',
+                '_bbc_guests'              => '8',
+                '_bbc_cabins'              => '3',
+                '_bbc_bathrooms'           => '3',
+                '_bbc_berths'              => '6',
+                '_bbc_location'            => 'Ibiza, Spain',
+                '_bbc_boat_type'           => 'motor yacht',
+                '_bbc_condition'           => 'like-new',
+                '_bbc_price_hour'          => '1150',
+                '_bbc_price_half_day'      => '6200',
+                '_bbc_price_day'           => '11800',
+                '_bbc_price_week'          => '70000',
+                '_bbc_year'                => '2021',
+                '_bbc_year_built'          => '2021',
+                '_bbc_builder'             => 'Princess Yachts',
+                '_bbc_max_speed'           => '22',
+                '_bbc_crew'                => '3',
+                '_bbc_beam'                => '5.0',
+                '_bbc_captain_included'    => 'yes',
+                '_bbc_fuel_included'       => 'no',
+            ),
         ),
         array(
             'title'   => 'The Obsidian Edge',
             'content' => "Sharp bow, aggressive stance, obsidian hull — The Obsidian Edge is a vessel that demands attention. A Riva superyacht born from the racing pedigree that made the Italian brand legendary.\n\nBelow decks, the interior is a study in contemporary Italian design: Nero Marquina marble, brushed brass, and hand-laid carbon fibre surfaces throughout.",
             'excerpt' => 'Sharp lines, obsidian hull, and relentless speed. A yacht that turns heads in every marina.',
-            'meta'    => array( '_bbc_length' => '82', '_bbc_max_guests' => '10', '_bbc_guests' => '10', '_bbc_cabins' => '4', '_bbc_location' => 'Cannes, France', '_bbc_price_half_day' => '10400', '_bbc_year' => '2023', '_bbc_builder' => 'Riva', '_bbc_max_speed' => '30', '_bbc_crew' => '5', '_bbc_beam' => '5.6' ),
+            'meta'    => array(
+                '_bbc_length'              => '82',
+                '_bbc_max_guests'          => '10',
+                '_bbc_guests'              => '10',
+                '_bbc_cabins'              => '4',
+                '_bbc_bathrooms'           => '4',
+                '_bbc_berths'              => '8',
+                '_bbc_location'            => 'Cannes, France',
+                '_bbc_boat_type'           => 'superyacht',
+                '_bbc_condition'           => 'new',
+                '_bbc_price_hour'          => '1900',
+                '_bbc_price_half_day'      => '10400',
+                '_bbc_price_day'           => '19500',
+                '_bbc_price_week'          => '117000',
+                '_bbc_year'                => '2023',
+                '_bbc_year_built'          => '2023',
+                '_bbc_builder'             => 'Riva',
+                '_bbc_max_speed'           => '30',
+                '_bbc_crew'                => '5',
+                '_bbc_beam'                => '5.6',
+                '_bbc_captain_included'    => 'yes',
+                '_bbc_fuel_included'       => 'yes',
+            ),
         ),
         array(
             'title'   => 'Silver Serenity',
             'content' => "Silver Serenity redefines the art of gentle living at sea. At 92 feet, she carries her guests in an atmosphere of hushed luxury — white-gloved service, Michelin-starred menus, and curated art collections.\n\nThe master stateroom spans the full beam of the vessel and opens onto a private balcony.",
             'excerpt' => 'A superyacht-class experience. Silver Serenity redefines the art of gentle living at sea.',
-            'meta'    => array( '_bbc_length' => '92', '_bbc_max_guests' => '12', '_bbc_guests' => '12', '_bbc_cabins' => '5', '_bbc_location' => 'Amalfi Coast, Italy', '_bbc_price_half_day' => '13800', '_bbc_year' => '2022', '_bbc_builder' => 'Benetti', '_bbc_max_speed' => '18', '_bbc_crew' => '6', '_bbc_beam' => '6.8' ),
+            'meta'    => array(
+                '_bbc_length'              => '92',
+                '_bbc_max_guests'          => '12',
+                '_bbc_guests'              => '12',
+                '_bbc_cabins'              => '5',
+                '_bbc_bathrooms'           => '5',
+                '_bbc_berths'              => '10',
+                '_bbc_location'            => 'Amalfi Coast, Italy',
+                '_bbc_boat_type'           => 'superyacht',
+                '_bbc_condition'           => 'like-new',
+                '_bbc_price_hour'          => '2550',
+                '_bbc_price_half_day'      => '13800',
+                '_bbc_price_day'           => '26000',
+                '_bbc_price_week'          => '156000',
+                '_bbc_year'                => '2022',
+                '_bbc_year_built'          => '2022',
+                '_bbc_builder'             => 'Benetti',
+                '_bbc_max_speed'           => '18',
+                '_bbc_crew'                => '6',
+                '_bbc_beam'                => '6.8',
+                '_bbc_captain_included'    => 'yes',
+                '_bbc_fuel_included'       => 'yes',
+            ),
         ),
     );
 
     if ( post_type_exists( 'boat' ) ) {
         foreach ( $demo_yachts as $i => $yacht ) {
-            $existing = oc_demo_find_post_by_title( $yacht['title'], 'boat' );
-            if ( $existing ) {
-                $results[] = "Yacht already exists: {$yacht['title']}";
-                continue;
+            $existing_id = oc_demo_find_post_by_title( $yacht['title'], 'boat' );
+            $is_new      = false;
+
+            if ( $existing_id ) {
+                $post_id = $existing_id;
+            } else {
+                $post_id = wp_insert_post( array(
+                    'post_title'   => $yacht['title'],
+                    'post_content' => $yacht['content'],
+                    'post_excerpt' => $yacht['excerpt'],
+                    'post_status'  => 'publish',
+                    'post_type'    => 'boat',
+                ) );
+
+                if ( is_wp_error( $post_id ) ) {
+                    $results[] = "Error creating yacht {$yacht['title']}: " . $post_id->get_error_message();
+                    continue;
+                }
+                $is_new = true;
             }
 
-            $post_id = wp_insert_post( array(
-                'post_title'   => $yacht['title'],
-                'post_content' => $yacht['content'],
-                'post_excerpt' => $yacht['excerpt'],
-                'post_status'  => 'publish',
-                'post_type'    => 'boat',
-            ) );
-
-            if ( is_wp_error( $post_id ) ) {
-                $results[] = "Error creating yacht {$yacht['title']}: " . $post_id->get_error_message();
-                continue;
-            }
-
+            // Always (re)apply meta. Existing boats may have been seeded by an
+            // older importer that used `_bbc_year` / `_bbc_price_half_day` only —
+            // the current templates read `_bbc_year_built`, `_bbc_price_hour`,
+            // `_bbc_price_day`, `_bbc_price_week`, `_bbc_boat_type`,
+            // `_bbc_condition`, `_bbc_bathrooms`, `_bbc_berths`, and so on, so
+            // those would render empty. Re-applying on every import fills the
+            // gap idempotently without clobbering anything the user has hand-
+            // edited (we only set keys that exist in our seed array).
             foreach ( $yacht['meta'] as $key => $val ) {
                 update_post_meta( $post_id, $key, $val );
             }
             update_post_meta( $post_id, '_bbc_amenities', $amenities );
 
-            // Featured image + gallery (best-effort).
-            $att_id = oc_demo_sideload_image( $vessel_imgs[ $i ] ?? '', $post_id, $yacht['title'] );
-            if ( $att_id ) {
-                set_post_thumbnail( $post_id, $att_id );
-                update_post_meta( $post_id, '_bbc_gallery', array( $att_id ) );
+            // Featured image + gallery — only sideload when missing, so we
+            // don't churn the media library on re-imports.
+            $has_thumb = (bool) get_post_thumbnail_id( $post_id );
+            $att_id    = 0;
+            if ( ! $has_thumb ) {
+                $att_id = oc_demo_sideload_image( $vessel_imgs[ $i ] ?? '', $post_id, $yacht['title'] );
+                if ( $att_id ) {
+                    set_post_thumbnail( $post_id, $att_id );
+                    update_post_meta( $post_id, '_bbc_gallery', array( $att_id ) );
+                }
             }
 
-            $results[] = "Created yacht: {$yacht['title']}" . ( $att_id ? ' (with image)' : ' (image fell back to CDN)' );
+            $label = $is_new ? 'Created yacht' : 'Yacht refreshed';
+            $notes = array();
+            $notes[] = 'meta synced';
+            if ( ! $is_new && ! $has_thumb && $att_id ) {
+                $notes[] = 'image restored';
+            } elseif ( $is_new ) {
+                $notes[] = $att_id ? 'with image' : 'image fell back to CDN';
+            }
+            $results[] = "{$label}: {$yacht['title']} (" . implode( ', ', $notes ) . ')';
         }
     } else {
         $results[] = 'Skipped yachts — boat post type not registered (activate Boat Booking Core).';
@@ -276,50 +441,77 @@ function oc_run_demo_import(): array {
         array( 'title' => 'Contact',      'slug' => 'contact',      'template' => 'page-contact.php',      'hero' => 'OC_IMG_HERO_CONTACT' ),
     );
 
+    $managed_marker = '<!-- Managed by the Ocean Charter template -->';
+
     $page_ids = array();
     foreach ( $demo_pages as $page ) {
         $existing = get_page_by_path( $page['slug'] );
+
         if ( $existing ) {
-            $page_ids[ $page['slug'] ] = $existing->ID;
-            if ( ! empty( $page['template'] ) ) {
-                update_post_meta( $existing->ID, '_wp_page_template', $page['template'] );
+            $post_id   = (int) $existing->ID;
+            $is_new    = false;
+            $notes     = array();
+        } else {
+            $post_id = wp_insert_post( array(
+                'post_title'   => $page['title'],
+                'post_name'    => $page['slug'],
+                'post_content' => $managed_marker,
+                'post_status'  => 'publish',
+                'post_type'    => 'page',
+            ) );
+
+            if ( is_wp_error( $post_id ) ) {
+                $results[] = "Error creating page {$page['title']}: " . $post_id->get_error_message();
+                continue;
             }
-            // Self-heal: a page left in Elementor "builder" mode renders its old
-            // saved layout via the_content() and bypasses the theme's PHP template.
-            // Strip it so the redesigned template always wins.
-            oc_demo_strip_elementor( $existing->ID );
-            $results[] = "Page refreshed: {$page['title']}";
-            continue;
+            $is_new = true;
+            $notes  = array();
         }
 
-        $post_id = wp_insert_post( array(
-            'post_title'   => $page['title'],
-            'post_name'    => $page['slug'],
-            'post_content' => '<!-- Managed by the Ocean Charter template -->',
-            'post_status'  => 'publish',
-            'post_type'    => 'page',
-        ) );
-
-        if ( is_wp_error( $post_id ) ) {
-            $results[] = "Error creating page {$page['title']}: " . $post_id->get_error_message();
-            continue;
-        }
-
+        // Template assignment (skip if the demo entry has no template, e.g. Home).
         if ( ! empty( $page['template'] ) ) {
             update_post_meta( $post_id, '_wp_page_template', $page['template'] );
         }
 
-        // Hero image (best-effort).
-        $hero_url = defined( $page['hero'] ) ? constant( $page['hero'] ) : '';
-        $hero_id  = oc_demo_sideload_image( $hero_url, $post_id, $page['title'] . ' hero' );
-        if ( $hero_id ) {
-            update_post_meta( $post_id, '_oc_hero_image', $hero_id );
-            set_post_thumbnail( $post_id, $hero_id );
+        // Strip stale Elementor meta so the redesigned PHP template wins. A page
+        // left in Elementor "builder" mode renders its old saved layout via
+        // the_content() and bypasses the theme template entirely.
+        oc_demo_strip_elementor( $post_id );
+
+        // Reset post_content if it still carries stale OCDI HTML — old imports
+        // shipped pages with huge inline <style> blocks that aren't rendered by
+        // the new templates but confuse anyone editing the page in WP admin.
+        if ( ! $is_new ) {
+            $current_content = (string) get_post_field( 'post_content', $post_id );
+            if ( strpos( $current_content, $managed_marker ) === false ) {
+                wp_update_post( array(
+                    'ID'           => $post_id,
+                    'post_content' => $managed_marker,
+                ) );
+                $notes[] = 'content reset';
+            }
         }
 
-        oc_demo_strip_elementor( $post_id );
+        // Hero image — sideload if missing. Without this, an existing page
+        // re-imported after a prior cleanup ends up with no hero, and the
+        // template renders an empty hero block. Best-effort: silently skips
+        // on download failure and the template's CDN fallback takes over.
+        $current_hero = absint( get_post_meta( $post_id, '_oc_hero_image', true ) );
+        if ( ! $current_hero ) {
+            $hero_url = ! empty( $page['hero'] ) && defined( $page['hero'] ) ? constant( $page['hero'] ) : '';
+            $hero_id  = oc_demo_sideload_image( $hero_url, $post_id, $page['title'] . ' hero' );
+            if ( $hero_id ) {
+                update_post_meta( $post_id, '_oc_hero_image', $hero_id );
+                set_post_thumbnail( $post_id, $hero_id );
+                $notes[] = 'hero restored';
+            }
+        }
+
         $page_ids[ $page['slug'] ] = $post_id;
-        $results[] = "Created page: {$page['title']}";
+
+        $label = $is_new ? 'Created page' : 'Page refreshed';
+        $tail  = $notes ? ' (' . implode( ', ', $notes ) . ')' : '';
+        $results[] = "{$label}: {$page['title']}{$tail}";
     }
 
     /* 3. FRONT PAGE. front-page.php renders the home template automatically. */
@@ -434,7 +626,98 @@ function oc_run_demo_import(): array {
     flush_rewrite_rules();
     $results[] = 'Rewrite rules flushed.';
 
+    /* 8. Flush Boat Booking Core caches. The plugin caches lowest-price and
+       blocked-dates per boat via transients (24h / 1h). After a demo re-import
+       changes a boat's pricing meta the front-end would otherwise keep serving
+       the stale cached value until the transient expires. */
+    if ( function_exists( 'bbc_flush_all_caches' ) ) {
+        $deleted = bbc_flush_all_caches();
+        $results[] = sprintf( 'BBC caches flushed (%d transient rows).', $deleted );
+    }
+
+    /* 9. Seed Ocean Charter CPTs. Until now the importer only created BBC posts
+       (boat, bbc_package) and the page shells — every OC CPT the theme registers
+       (destinations, services, team members, testimonials, vessels, itineraries,
+       offers, FAQs, press) was left empty, so the redesigned templates rendered
+       half-populated and looked like an older demo. inc/cpt/demo-content*.php and
+       seed-images.php have a complete CPT dataset; wire them in here so a single
+       import populates the whole theme. */
+    foreach ( oc_demo_run_cpt_seeders() as $line ) {
+        $results[] = $line;
+    }
+
     return $results;
+}
+
+/**
+ * Run the three CPT seeders that live in inc/cpt/ and surface their output as
+ * importer result lines. Each seeder protects itself with its own
+ * `oc_demo_seeded` / `oc_demo_extra_seeded` option; we clear those first so
+ * a re-import actually re-runs (the seeders themselves are idempotent —
+ * oc_seed_post() reuses existing posts by title).
+ *
+ * @return string[]
+ */
+function oc_demo_run_cpt_seeders(): array {
+    $base = OC_THEME_DIR . '/inc/cpt';
+    $jobs = array(
+        'demo content (destinations, services, team, testimonials, itineraries, FAQs, offers, press)' => 'demo-content.php',
+        'extra demo content (more itineraries, offers, vessels)'                                       => 'demo-content-extra.php',
+        'CPT featured images (sideloaded from Pexels)'                                                 => 'seed-images.php',
+    );
+
+    // Clear the seeders' run-once flags so re-importing actually re-runs.
+    delete_option( 'oc_demo_seeded' );
+    delete_option( 'oc_demo_extra_seeded' );
+
+    $out = array();
+    foreach ( $jobs as $label => $file ) {
+        $path = $base . '/' . $file;
+        if ( ! file_exists( $path ) ) {
+            $out[] = "Skipped: {$label} — file missing ({$file}).";
+            continue;
+        }
+
+        ob_start();
+        try {
+            // include (not require_once) so re-runs in the same request still
+            // execute. The seeders guard against re-defining helpers internally.
+            include $path;
+            $captured = ob_get_clean();
+        } catch ( \Throwable $e ) {
+            ob_end_clean();
+            $out[] = "Error seeding {$label}: " . $e->getMessage();
+            continue;
+        }
+
+        // Compress the seeder's chatty echo output into a single summary line
+        // plus any [ERROR] lines surfaced verbatim, so the admin result list
+        // stays readable.
+        $line_count = 0;
+        $errors     = array();
+        foreach ( preg_split( "/\r\n|\n|\r/", trim( (string) $captured ) ) as $line ) {
+            $line = trim( $line );
+            if ( $line === '' ) {
+                continue;
+            }
+            $line_count++;
+            if ( stripos( $line, '[ERROR]' ) !== false || stripos( $line, 'error' ) !== false ) {
+                $errors[] = $line;
+            }
+        }
+
+        $out[] = sprintf(
+            'CPT seeder: %s — %d log lines%s',
+            $label,
+            $line_count,
+            $errors ? ', ' . count( $errors ) . ' errors' : ''
+        );
+        foreach ( $errors as $err ) {
+            $out[] = '    ' . $err;
+        }
+    }
+
+    return $out;
 }
 
 /**
